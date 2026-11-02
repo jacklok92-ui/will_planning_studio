@@ -30,7 +30,7 @@
  <main class="main">
   <div class="heading"><div class="eyebrow">CLIENT PLANNING / V2</div><h1 id="title">Will Planning Overview</h1><p id="desc">Complete the same information requested in the 8-page Will Writing Information Form.</p></div>
   <section id="overview" class="pages active">
-   <div class="stats"><div class="stat"><small>CLAUSES</small><strong id="statClauses">4</strong><span class="tiny">Form-marked @ count</span></div><div class="stat"><small>WILL CATEGORY</small><strong id="statType" style="font-size:16px">Basic Will</strong><span class="tiny" id="statRange">Up to 9 clauses</span></div><div class="stat"><small>ESTIMATED FEE</small><strong id="statFee">RM648</strong><span class="tiny">Inclusive of 8% SST</span></div></div>
+   <div class="stats"><div class="stat"><small>CLAUSES</small><strong id="statClauses">4</strong><span class="tiny">Form-marked @ count</span></div><div class="stat"><small>WILL CATEGORY</small><strong id="statType" style="font-size:16px">Basic Will</strong><span class="tiny" id="statRange">Up to 9 clauses</span></div><div class="stat"><small>ESTIMATED FEE</small><strong id="statFee">RM648</strong><span class="tiny">Base Will fee · RWT fee not selected</span></div></div>
    <div class="panel"><h2>Start a Client Will Plan</h2><p class="sub">Enter the client's name and reference details. Complete every applicable section; the app saves locally on this device.</p><div class="grid"><div class="field"><label>Testator Name</label><input data-path="personal.name" placeholder="Full name as per NRIC"></div><div class="field"><label>NRIC / Passport No.</label><input data-path="personal.nric"></div><div class="field"><label>Planning Date</label><input type="date" data-path="personal.planDate"></div><div class="field"><label>REP / Prepared By</label><input data-path="franchisee.repName"></div></div><div class="row" style="margin-top:15px"><span class="tiny">Start with Personal Particulars (4@ compulsory).</span><button class="btn primary" data-go="personal">Continue →</button></div></div>
    <div class="panel"><div class="row"><div><h2>Saved Client Plans</h2><p class="sub">Stored in this browser only.</p></div><button class="btn smallbtn" id="refreshSaved">Refresh</button></div><div id="savedList" class="tiny muted">No saved records.</div>
     <div class="divider"></div>
@@ -57,7 +57,7 @@
    <div class="panel"><h2>Franchisee Details</h2><p class="sub">Header fields on page 1 of the source form.</p><div class="grid"><div class="field"><label>Franchisee Name</label><input data-path="franchisee.name"></div><div class="field"><label>Franchisee Code</label><input data-path="franchisee.code"></div><div class="field"><label>Franchisee HP No.</label><input data-path="franchisee.phone"></div><div class="field"><label>Franchisee Email</label><input data-path="franchisee.email"></div></div></div>
   </section>
   <section id="appointments" class="pages">
-   <div class="panel"><h2>A. Details of Executors / Trustees</h2><p class="sub">Maximum 4 persons · Minimum 2 persons / 2 tiers. E1 and E3 are each marked 1@; E2 and E4 have no separate @.</p><div id="executors"></div><div class="field"><label>Appoint Rockwills Trustee as Executor (Optional)</label><select data-path="appointments.rwt"><option value="">Not appointed</option><option>Sole Executor</option><option>Substitute to the above</option></select></div><div class="tiny" style="margin-top:7px">RM120 appointment fee is stated on the source form if RWT is appointed as Sole or Substitute Executor. This is separate from clause count.</div></div>
+   <div class="panel"><h2>A. Details of Executors / Trustees</h2><p class="sub">Maximum 4 persons · Minimum 2 persons / 2 tiers. E1 and E3 are each marked 1@; E2 and E4 have no separate @.</p><div id="executors"></div><div class="field"><label>Appoint Rockwills Trustee as Executor (Optional)</label><select data-path="appointments.rwt"><option value="">Not appointed</option><option>Sole Executor</option><option>Substitute to the above</option></select></div><div class="tiny" style="margin-top:7px">When “Substitute to the above” is selected, an additional RM120 Rockwills Substitute Executor fee will be added to the estimated Will fee. This fee does not add clauses.</div></div>
    <div class="panel"><h2>B. Guardians for Minor Beneficiaries</h2><p class="sub">When both husband and wife have passed on. G1 marked 1@; G2 has no separate @.</p><div id="guardians"></div><div class="divider"></div><div class="checkrow"><label class="check"><input type="checkbox" data-path-check="guardianPayment.enabled"> Optional 2@@ Payment to Guardian</label></div><div id="guardianPaymentFields" class="hidden" style="margin-top:10px"><div class="grid"><div class="field"><label>Payment to Guardian?</label><select data-path="guardianPayment.yesNo"><option value="">Select</option><option>Yes</option><option>No</option></select></div><div class="field"><label>Payment Frequency</label><select data-path="guardianPayment.frequency"><option value="">Select</option><option>Lump Sum</option><option>Regular – Monthly</option><option>Regular – Quarterly</option><option>Regular – Half-yearly</option><option>Regular – Yearly</option></select></div><div class="field full"><label>Please Specify</label><textarea data-path="guardianPayment.details"></textarea></div></div></div></div>
    <div class="panel"><h2>C. Digital Facilitators</h2><p class="sub">For Digital Assets only · Must appoint two persons. D1 marked 1@; D2 has no separate @.</p><div id="facilitators"></div></div>
   </section>
@@ -118,7 +118,7 @@ const blank=()=>({
  trusts:{movable:{enabled:false},immovable:{enabled:false}},protectors:[{},{}],
  signoff:{testatorName:"",testatorNric:"",testatorDate:"",repName:"",repDate:"",idSighted:""}
 });
-const APP_VERSION="2.1.0";
+const APP_VERSION="2.5.0";
 const DB_KEY="willStudioV2Records";
 const DB_META_KEY="willStudioV2Meta";
 let d=blank(),activeId=null,page="overview";
@@ -154,9 +154,47 @@ function renderAppointments(){
 }
 function renderBeneficiaries(){document.getElementById("beneficiaryList").innerHTML=Array.from({length:Math.max(10,d.beneficiaries.length)}).map((_,i)=>{let b=d.beneficiaries[i]||{};return `<div class="item"><div class="itemhead"><b>B${i+1}</b>${i>=10?`<button class="btn smallbtn red" data-del-ben="${i}">Remove</button>`:""}</div><div class="grid four"><div class="field"><label>Name</label><input data-ben="${i}.name" value="${esc(b.name||"")}"></div><div class="field"><label>NRIC / Passport No.</label><input data-ben="${i}.id" value="${esc(b.id||"")}"></div><div class="field"><label>Relationship</label><input data-ben="${i}.relationship" value="${esc(b.relationship||"")}"></div><div class="field"><label>Nationality</label><input data-ben="${i}.nationality" value="${esc(b.nationality||"")}"></div></div></div>`}).join("");document.querySelectorAll("[data-ben]").forEach(el=>el.oninput=()=>{let [i,k]=el.dataset.ben.split(".");d.beneficiaries[+i]??={};d.beneficiaries[+i][k]=el.value;updateAllDerived()});document.querySelectorAll("[data-del-ben]").forEach(el=>el.onclick=()=>{d.beneficiaries.splice(+el.dataset.delBen,1);renderBeneficiaries()})}
 function benOptions(selected=""){let out=d.beneficiaries.map((b,i)=>b&&(b.name||b.id)?`<option value="B${i+1}" ${selected==="B"+(i+1)?"selected":""}>B${i+1} – ${esc(b.name||"Name pending")}</option>`:"").join("");return `<option value="">Select beneficiary</option>${out}<option value="FUTURE" ${selected==="FUTURE"?"selected":""}>Future Child(ren) (if any)</option>`}
-function allocGroup(path,title){let a=get(path)||{mode:"equal",members:[]};let members=a.members||[];return `<div class="alloc"><div class="allochead"><b>${title}</b><label class="check"><input type="checkbox" data-equal="${path}" ${a.mode==="equal"?"checked":""}> Split Equally</label></div><div data-members="${path}">${members.map((m,i)=>`<div class="allocrow"><select data-member="${path}.${i}.id">${benOptions(m.id)}</select>${a.mode==="equal"?`<span class="tiny pct">Equal share</span>`:`<input class="pct" type="number" min="0" max="100" step="0.01" data-member="${path}.${i}.pct" value="${esc(m.pct??"")}">`}<button class="btn smallbtn red" data-remove-member="${path}:${i}">×</button></div>`).join("")}</div><div class="allocfoot"><button class="btn smallbtn" data-add-member="${path}">＋ Add beneficiary</button><span class="${!members.length?"muted":allocTotal(a)===100?"ok":"warn"}" data-total="${path}">${members.length?`Total: ${allocTotal(a)}%`:"No beneficiaries yet"}</span></div></div>`}
+function allocGroup(path,title){let a=get(path)||{mode:"equal",members:[]};let members=a.members||[];return `<div class="alloc"><div class="allochead"><b>${title}</b><label class="check"><input type="checkbox" data-equal="${path}" ${a.mode==="equal"?"checked":""}> Split Equally</label></div><div data-members="${path}">${members.map((m,i)=>`<div class="allocrow"><select data-alloc-path="${path}" data-member-index="${i}" data-member-field="id">${benOptions(m.id)}</select>${a.mode==="equal"?`<span class="tiny pct">Equal share</span>`:`<input class="pct" type="number" min="0" max="100" step="0.01" data-alloc-path="${path}" data-member-index="${i}" data-member-field="pct" value="${esc(m.pct??"")}">`}<button class="btn smallbtn red" data-remove-member="${path}:${i}">×</button></div>`).join("")}</div><div class="allocfoot"><button class="btn smallbtn" data-add-member="${path}">＋ Add beneficiary</button><span class="${!members.length?"muted":allocTotal(a)===100?"ok":"warn"}" data-total="${path}">${members.length?`Total: ${allocTotal(a)}%`:"No beneficiaries yet"}</span></div></div>`}
 function allocTotal(a){if(!a?.members?.length)return 0;if(a.mode==="equal")return 100;return Math.round(a.members.reduce((s,m)=>s+Number(m.pct||0),0)*100)/100}
-function wireAlloc(root=document){root.querySelectorAll("[data-equal]").forEach(el=>el.onchange=()=>{let path=el.dataset.equal,a=get(path)||{members:[]};a.mode=el.checked?"equal":"custom";put(path,a);rerenderAllocContainer(root,path)});root.querySelectorAll("[data-add-member]").forEach(el=>el.onclick=()=>{let path=el.dataset.addMember,a=get(path)||{mode:"equal",members:[]};a.members??=[];a.members.push({id:"",pct:""});put(path,a);rerenderAllocContainer(root,path)});root.querySelectorAll("[data-remove-member]").forEach(el=>el.onclick=()=>{let [path,i]=el.dataset.removeMember.split(":");let a=get(path);a.members.splice(+i,1);put(path,a);rerenderAllocContainer(root,path)});root.querySelectorAll("[data-member]").forEach(el=>el.onchange=el.oninput=()=>{let [path,i,k]=el.dataset.member.split(".");let a=get(path);a.members[+i][k]=el.value;updateAllDerived();let t=root.querySelector(`[data-total="${CSS.escape(path)}"]`);if(t)t.textContent=a.members.length?`Total: ${allocTotal(a)}%`:"No beneficiaries yet";if(t)t.className=!a.members.length?"muted":allocTotal(a)===100?"ok":"warn"})}
+function wireAlloc(root=document){
+ root.querySelectorAll("[data-equal]").forEach(el=>el.onchange=()=>{
+  let path=el.dataset.equal,a=get(path)||{members:[]};
+  a.mode=el.checked?"equal":"custom";
+  put(path,a);rerenderAllocContainer(root,path)
+ });
+ root.querySelectorAll("[data-add-member]").forEach(el=>el.onclick=()=>{
+  let path=el.dataset.addMember,a=get(path)||{mode:"equal",members:[]};
+  a.members??=[];a.members.push({id:"",pct:""});
+  put(path,a);rerenderAllocContainer(root,path)
+ });
+ root.querySelectorAll("[data-remove-member]").forEach(el=>el.onclick=()=>{
+  let [path,i]=el.dataset.removeMember.split(":");let a=get(path);
+  if(a?.members){a.members.splice(+i,1);put(path,a);rerenderAllocContainer(root,path)}
+ });
+ root.querySelectorAll("[data-alloc-path]").forEach(el=>{
+  const update=()=>{
+   const path=el.dataset.allocPath,index=Number(el.dataset.memberIndex),field=el.dataset.memberField;
+   let a=get(path);
+   if(!a||!Array.isArray(a.members)||!a.members[index])return;
+   a.members[index][field]=el.value;
+   updateAllDerived();
+   const t=root.querySelector(`[data-total="${CSS.escape(path)}"]`);
+   if(t){
+    t.textContent=a.members.length?`Total: ${allocTotal(a)}%`:"No beneficiaries yet";
+    t.className=!a.members.length?"muted":allocTotal(a)===100?"ok":"warn";
+   }
+  };
+  el.addEventListener("change",update);
+  if(el.tagName!=="SELECT")el.addEventListener("input",update);
+ });
+}
+function syncAllocationControls(){
+ document.querySelectorAll("[data-alloc-path]").forEach(el=>{
+  const path=el.dataset.allocPath,index=Number(el.dataset.memberIndex),field=el.dataset.memberField;
+  let a=get(path);
+  if(a?.members?.[index])a.members[index][field]=el.value;
+ });
+}
 function rerenderAllocContainer(root,path){let target=root.querySelector(`[data-members="${CSS.escape(path)}"]`)?.parentElement;if(target){let html=allocGroup(path,target.querySelector(".allochead b")?.textContent||"Beneficiaries");let tmp=document.createElement("div");tmp.innerHTML=html;target.replaceWith(tmp.firstElementChild);wireAlloc(root)}}
 function allocationBlock(base){return ["main","sub1","sub2"].map((k,i)=>allocGroup(base+"."+k,["Main Beneficiaries *","Substitute Beneficiaries 1 (Optional)","Substitute Beneficiaries 2 (Optional)"][i])).join("")}
 function renderGifts(){
@@ -187,7 +225,18 @@ function clauseRows(){let r=[{sec:"4",label:"Personal Particulars",qty:4,basis:"
  return r}
 function totalClauses(){return clauseRows().reduce((s,x)=>s+x.qty,0)}
 function fee(n){if(n<=9)return["Basic Will",648,"Up to 9"];if(n<=12)return["Intermediate Will I",810,"10–12"];if(n<=15)return["Intermediate Will II",972,"13–15"];if(n<=18)return["Comprehensive Will I",1188,"16–18"];if(n<=21)return["Comprehensive Will II",1404,"19–21"];if(n<=24)return["Comprehensive Will III",1728,"22–24"];if(n<=27)return["Exclusive Will I",2052,"25–27"];if(n<=30)return["Exclusive Will II",2376,"28–30"];return["Exclusive Will III","Refer to schedule","Above 30 – confirm exact fee"]}
-function updateAllDerived(){let n=totalClauses(),f=fee(n);document.getElementById("statClauses").textContent=n;document.getElementById("statType").textContent=f[0];document.getElementById("statRange").textContent=f[2]+" clauses";document.getElementById("statFee").textContent=typeof f[1]==="number"?"RM"+f[1].toLocaleString("en-MY"):f[1];if(page==="report")renderPreview()}
+function rwtSubstituteFee(){return d.appointments?.rwt==="Substitute to the above"?120:0}
+function totalEstimatedFee(){const base=fee(totalClauses())[1];return typeof base==="number"?base+rwtSubstituteFee():base}
+function updateAllDerived(){
+ let n=totalClauses(),f=fee(n),rwtFee=rwtSubstituteFee(),total=totalEstimatedFee();
+ document.getElementById("statClauses").textContent=n;
+ document.getElementById("statType").textContent=f[0];
+ document.getElementById("statRange").textContent=f[2]+" clauses";
+ document.getElementById("statFee").textContent=typeof total==="number"?"RM"+total.toLocaleString("en-MY"):total;
+ const feeNote=document.querySelector("#statFee")?.parentElement?.querySelector("span");
+ if(feeNote)feeNote.textContent=rwtFee?`Includes RM120 fee for Rockwills as Substitute Executor`:"Base Will fee · RWT fee not selected";
+ if(page==="report")renderPreview()
+}
 function initRender(){renderAppointments();renderBeneficiaries();renderGifts();renderResiduary();renderOptional();renderProtectors();bind();toggleConditional();updateAllDerived()}
 function fmtPerson(p){return [p.name,p.id,p.relationship,p.address,p.email,p.phone,p.arrangement].filter(Boolean).map(esc).join(" · ")||"Not entered"}
 function pctText(a){if(!a?.members?.length)return "Not allocated";if(a.mode==="equal"){let x=(100/a.members.length).toFixed(2).replace(/\.00$/,"");return a.members.map(m=>`${benLabel(m.id)} (${x}%)`).join("; ")+" – Split Equally"}return a.members.map(m=>`${benLabel(m.id)} (${m.pct||0}%)`).join("; ")+" – Total "+allocTotal(a)+"%"}
@@ -195,37 +244,166 @@ function benLabel(id){if(id==="FUTURE")return "Future Child(ren) (if any)";let i
 function val(v){return esc(v||"—")}
 function allocationTable(a){a=a||{mode:"custom",members:[]};let total=allocTotal(a),has=!!a.members?.length;return `<div>${(a?.members||[]).map(m=>`<div>${esc(benLabel(m.id))} – ${a.mode==="equal"?(100/a.members.length).toFixed(2)+"%":esc(m.pct||0)+"%"}</div>`).join("")||"Not allocated"}<div class="tiny">${a?.mode==="equal"&&has?"Split Equally":has?"Custom percentage allocation":""}${has?" · Total "+total+"%":""}</div>${has&&a.mode!=="equal"&&total!==100?`<div class="tiny" style="color:#a33f36;font-weight:bold">Allocation total must equal 100% before finalisation.</div>`:""}</div>`}
 function reportHtml(internal=false){
- let n=totalClauses(),f=fee(n),p=d.personal,rows=clauseRows();
- let allocationWarnings=[];
- const checkAlloc=(label,a)=>{if(!a?.members?.length)allocationWarnings.push(label+": Main / beneficiary allocation not completed.");else if(a.mode!=="equal"&&allocTotal(a)!==100)allocationWarnings.push(label+": allocation total is "+allocTotal(a)+"%, not 100%.")};
- giftDefs.forEach(([id,label])=>{let g=d.gifts.specific[id];if(g?.enabled){checkAlloc(label+" – Main",g.alloc?.main);}});
- d.properties.forEach((x,i)=>{if(x.details||x.type||x.alloc?.main?.members?.length)checkAlloc("Property "+(i+1)+" – Main",x.alloc?.main)});
- d.businesses.forEach((x,i)=>{if(x.name||x.reg||x.alloc?.main?.members?.length)checkAlloc("Business "+(i+1)+" – Main",x.alloc?.main)});
- let h=`<div class="center">ROCKWILLS · WILL PLANNING WORKSPACE</div><h2>LAST WILL & TESTAMENT</h2><div class="center">FULL CLIENT PLANNING SUMMARY / 完整客户遗嘱规划摘要</div>
- ${allocationWarnings.length?`<h4>ALLOCATION ITEMS TO COMPLETE / 尚待确认的分配项目</h4><ul>${allocationWarnings.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`:""}
- <h4>1. TESTATOR PARTICULARS / 立遗嘱者个人资料 · 4@</h4><table>${[["Testator Name / 姓名",p.name],["NRIC / Passport No.",p.nric],["Date of Birth",p.dob],["Address / 住址",p.address],["Marital Status",p.marital],["Signature",p.signature],["HP No.",p.phone],["Email Address",p.email],["Can Testator Read English?",p.readEnglish],["Need Oral Translation?",p.translation],["Translator Name",p.translator],["Translator IC / Passport",p.translatorId],["Language / Dialect",p.language],["Estimated Will Fee (entered)",p.estimatedFee],["Custody",p.custody],["Franchisee Name",d.franchisee.name],["Franchisee Code",d.franchisee.code],["Franchisee HP No.",d.franchisee.phone],["Franchisee Email",d.franchisee.email],["REP / Prepared By",d.franchisee.repName],["Planning Date",p.planDate]].map(x=>`<tr><td>${x[0]}</td><td>${val(x[1])}</td></tr>`).join("")}</table>
- <h4>2. EXECUTORS / TRUSTEES · SECTION A</h4><table>${d.appointments.executors.map((x,i)=>`<tr><td>E${i+1}${i===0||i===2?" · 1@":""}</td><td>${fmtPerson(x)}</td></tr>`).join("")}<tr><td>Rockwills Trustee appointment</td><td>${val(d.appointments.rwt)}</td></tr></table>
- <h4>3. GUARDIANS · SECTION B</h4><table>${d.appointments.guardians.map((x,i)=>`<tr><td>G${i+1}${i===0?" · 1@":""}</td><td>${fmtPerson(x)}</td></tr>`).join("")}<tr><td>Guardian Payment · 2@@ if selected</td><td>${d.guardianPayment.enabled?`Selected: ${val(d.guardianPayment.yesNo)}; Frequency: ${val(d.guardianPayment.frequency)}; Details: ${val(d.guardianPayment.details)}`:"Not selected"}</td></tr></table>
- <h4>4. DIGITAL FACILITATORS · SECTION C</h4><table>${d.appointments.facilitators.map((x,i)=>`<tr><td>D${i+1}${i===0?" · 1@":""}</td><td>${fmtPerson(x)}</td></tr>`).join("")}</table>
- <h4>5. BENEFICIARY DIRECTORY · SECTION D</h4><table><tr><th>Code</th><th>Name</th><th>NRIC / Passport</th><th>Relationship</th><th>Nationality</th></tr>${d.beneficiaries.map((b,i)=>b&&(b.name||b.id||b.relationship||b.nationality)?`<tr><td>B${i+1}</td><td>${val(b.name)}</td><td>${val(b.id)}</td><td>${val(b.relationship)}</td><td>${val(b.nationality)}</td></tr>`:"").join("")||"<tr><td colspan='5'>No beneficiaries recorded</td></tr>"}</table>
- <h4>6. COMMON GIFTS · SECTION E</h4><ul>${d.gifts.common.jointBank?"<li>Joint Bank Accounts to respective joint account holders – 1@</li>":""}${d.gifts.common.jointUnitTrust?"<li>Joint Unit Trust Accounts to respective joint account holders – 1@</li>":""}${!d.gifts.common.jointBank&&!d.gifts.common.jointUnitTrust?"<li>None selected</li>":""}</ul>
- <h4>7. SPECIFIC GIFTS & ASSETS · SECTION F</h4>`;
- giftDefs.forEach(([id,label,q])=>{let g=d.gifts.specific[id];if(g?.enabled)h+=`<div style="margin:8px 0"><b>${esc(label)} – ${esc(g.details||"No additional description")}</b><table><tr><td>Main Beneficiaries</td><td>${allocationTable(g.alloc?.main)}</td></tr><tr><td>Substitute Beneficiaries 1</td><td>${allocationTable(g.alloc?.sub1)}</td></tr><tr><td>Substitute Beneficiaries 2</td><td>${allocationTable(g.alloc?.sub2)}</td></tr></table></div>`});
- h+=`<h4>8. IMMOVABLE PROPERTIES · SECTION G</h4>`;
- d.properties.forEach((x,i)=>{if(x.details||x.type||x.alloc?.main?.members?.length)h+=`<div><b>Property ${i+1}</b><table>${[["Property Type",x.type],["Full Address / Title Details",x.details],["Ownership",x.ownership],["Co-owner Name",x.coOwner],["Main Beneficiaries",null],["Substitute Beneficiaries 1",null],["Substitute Beneficiaries 2",null]].map(([k,v])=>`<tr><td>${k}</td><td>${v!==null?val(v):allocationTable(x.alloc?.[k==="Main Beneficiaries"?"main":k==="Substitute Beneficiaries 1"?"sub1":"sub2"])}</td></tr>`).join("")}</table></div>`});
- h+=`<h4>9. BUSINESS / COMPANY INTERESTS · SECTION H</h4>`;
- d.businesses.forEach((x,i)=>{if(x.name||x.reg||x.type||x.alloc?.main?.members?.length)h+=`<div><b>Business ${i+1}</b><table>${[["Company / Business Name",x.name],["Registration No.",x.reg],["Business Type",x.type],["Remarks",x.remarks],["Main Beneficiaries",null],["Substitute Beneficiaries 1",null],["Substitute Beneficiaries 2",null]].map(([k,v])=>`<tr><td>${k}</td><td>${v!==null?val(v):allocationTable(x.alloc?.[k==="Main Beneficiaries"?"main":k==="Substitute Beneficiaries 1"?"sub1":"sub2"])}</td></tr>`).join("")}</table></div>`});
- h+=`<h4>10. RESIDUARY ESTATE · SECTION I · COMPULSORY</h4><table>${["Main Beneficiaries","First Substitute Beneficiaries","Second Substitute Beneficiaries","Third Substitute Beneficiaries","Fourth Substitute Beneficiaries"].map((x,i)=>`<tr><td>${x} · 1@</td><td>${allocationTable(d.residuary[["main","sub1","sub2","sub3","sub4"][i]])}</td></tr>`).join("")}</table>
- <h4>11. OTHER MATTERS · SECTION J</h4><table><tr><td>Commorientes · 1@</td><td>${d.other.comm.enabled?"Selected – "+val(d.other.comm.days)+" days":"Not selected"}</td></tr><tr><td>Future Children · 1@</td><td>${d.other.futureChildren.enabled?`Include: ${val(d.other.futureChildren.include)}; Particular spouse: ${val(d.other.futureChildren.spouseName)}; Spouse NRIC: ${val(d.other.futureChildren.spouseNric)}; Instructions: ${val(d.other.futureChildren.notes)}`:"Not selected"}</td></tr><tr><td>Future Marriage · 1@</td><td>${d.other.futureMarriage.enabled?`Fiancé(e): ${val(d.other.futureMarriage.name)}; NRIC: ${val(d.other.futureMarriage.nric)}`:"Not selected"}</td></tr><tr><td>Exclusion of protected family member · 1@</td><td>${d.other.exclusion.enabled?`Name: ${val(d.other.exclusion.name)}; Relationship: ${val(d.other.exclusion.relationship)}; Reason(s): ${val(d.other.exclusion.reason)}`:"Not selected"}</td></tr></table>
- <h4>12. OPTIONAL CLAUSES · SECTION K</h4><ul>${optionalDefs.filter(([id])=>d.optional[id]?.enabled).map(([id,label,q])=>`<li>${esc(label)} (${q}@)</li>`).join("")||"<li>None selected</li>"}</ul>
- <h4>13. OTHER SPECIFIC ITEMS – MY WISHES · SECTION L</h4><table>${[["Funeral Arrangements",d.wishes.funeral],["Terms of Endearment",d.wishes.endearment],["Any Other Instruction",d.wishes.instruction]].map(([k,x])=>`<tr><td>${k} · 2@@</td><td>${x.enabled?val(x.text):"Not selected"}</td></tr>`).join("")}</table>
- <h4>14. TESTAMENTARY TRUST · SECTION M</h4><table>${d.trusts.movable.enabled?[["Movable Trust – Beneficiaries",d.trusts.movable.beneficiaries],["Purposes",d.trusts.movable.purposes],["Assets to set aside",d.trusts.movable.assets],["Duration",d.trusts.movable.duration],["Payment to beneficiaries",d.trusts.movable.payment],["Balance beneficiaries",d.trusts.movable.balance]].map(x=>`<tr><td>${x[0]}</td><td>${val(x[1])}</td></tr>`).join(""):"<tr><td>Movable Assets Trust</td><td>Not selected</td></tr>"}${d.trusts.immovable.enabled?[["Immovable Trust – Right of occupation",d.trusts.immovable.occupation],["Rental income beneficiaries",d.trusts.immovable.rental],["Assets to set aside",d.trusts.immovable.assets],["Duration",d.trusts.immovable.duration],["Trustee powers",d.trusts.immovable.powers],["End beneficiaries",d.trusts.immovable.balance]].map(x=>`<tr><td>${x[0]}</td><td>${val(x[1])}</td></tr>`).join(""):"<tr><td>Immovable Properties Trust</td><td>Not selected</td></tr>"}</table>
- <h4>15. APPOINTMENT OF PROTECTOR · 3@ IF TRUST</h4><table>${d.protectors.map((x,i)=>`<tr><td>P${i+1}</td><td>${fmtPerson(x)}</td></tr>`).join("")}</table>
- <h4>16. TESTATOR DECLARATION & REP VERIFICATION</h4><table>${[["Testator Full Name",d.signoff.testatorName],["Testator NRIC / Passport",d.signoff.testatorNric],["Testator Date",d.signoff.testatorDate],["REP Name",d.signoff.repName],["REP Date",d.signoff.repDate],["Original ID sighted?",d.signoff.idSighted]].map(x=>`<tr><td>${x[0]}</td><td>${val(x[1])}</td></tr>`).join("")}</table>
- <h4>17. PLANNING ESTIMATE</h4><table><tr><td>Estimated Clause Count</td><td><b>${n}</b></td></tr><tr><td>Will Category</td><td>${f[0]}</td></tr><tr><td>Estimated Will Writing Fee</td><td>${typeof f[1]==="number"?"RM "+f[1].toLocaleString("en-MY"):f[1]}</td></tr><tr><td>Custody</td><td>${val(p.custody)}</td></tr></table>
- <p class="footnote">This is a planning summary only and is not the final Will or legal advice. Final clauses, wording, eligibility and fees are subject to Rockwills' review and confirmation. 本摘要仅供遗嘱规划及讨论用途，并非正式遗嘱或法律意见。最终条款、内容及费用须以 Rockwills 审核确认为准。</p>`;
- if(internal)h+=`<h4>INTERNAL CLAUSE AUDIT / 内部条款计算明细</h4><table><tr><th>Section</th><th>Clause Item</th><th>Qty</th><th>Basis</th></tr>${rows.map(x=>`<tr><td>${x.sec}</td><td>${esc(x.label)}</td><td>${x.qty}</td><td>${esc(x.basis)}</td></tr>`).join("")}<tr><td colspan="2"><b>Total</b></td><td><b>${n}</b></td><td>${f[2]}</td></tr></table><p class="footnote">Allocation percentages are planning instructions and should total 100% within each allocation group. Confirm final legal drafting and clause interpretation with Rockwills.</p>`;
- return h
+ const n=totalClauses(), f=fee(n), p=d.personal, rwtFee=rwtSubstituteFee(), total=totalEstimatedFee();
+ const escv=v=>esc(v===undefined||v===null?"":String(v).trim());
+ const has=v=>v!==undefined&&v!==null&&String(v).trim()!=="";
+ const table=rows=>{
+  const valid=(rows||[]).filter(x=>has(x[1]));
+  return valid.length?`<table>${valid.map(x=>`<tr><td>${esc(x[0])}</td><td>${escv(x[1])}</td></tr>`).join("")}</table>`:"";
+ };
+ const peopleTable=(arr,prefix,markerIndexes=[])=>{
+  const rows=(arr||[]).map((x,i)=>({x,i})).filter(o=>Object.values(o.x||{}).some(has));
+  return rows.length?`<table>${rows.map(({x,i})=>`<tr><td>${prefix}${i+1}${markerIndexes.includes(i)?" · 1@":""}</td><td>${fmtPerson(x)}</td></tr>`).join("")}</table>`:"";
+ };
+ const beneficiaryName=id=>{
+  if(id==="FUTURE")return "Future Child(ren) (if any)";
+  const m=String(id||"").match(/^B(\d+)$/);
+  if(m){const b=d.beneficiaries[Number(m[1])-1];if(b)return `${id} – ${[b.name,b.relationship?`(${b.relationship})`:""].filter(Boolean).join(" ")}`;}
+  return has(id)?id:"";
+ };
+ const allocContent=a=>{
+  const members=(a?.members||[]).filter(m=>has(m?.id));
+  if(!members.length)return "";
+  const rows=members.map(m=>{
+   const pct=a.mode==="equal"?(100/members.length):Number(m.pct||0);
+   return `<div>${esc(beneficiaryName(m.id))} – ${pct.toFixed(2).replace(/\.00$/,"")}%</div>`;
+  }).join("");
+  const totalPct=a.mode==="equal"?100:members.reduce((sum,m)=>sum+Number(m.pct||0),0);
+  return `${rows}<div class="tiny">${a.mode==="equal"?"Split Equally":"Custom percentage allocation"} · Total ${totalPct.toFixed(2).replace(/\.00$/,"")}%</div>`;
+ };
+ const allocRows=a=>[
+  ["Main Beneficiaries",a?.main],
+  ["Substitute Beneficiaries 1",a?.sub1],
+  ["Substitute Beneficiaries 2",a?.sub2]
+ ].filter(x=>allocContent(x[1])).map(x=>`<tr><td>${x[0]}</td><td>${allocContent(x[1])}</td></tr>`).join("");
+ const section=(title,body)=>body?`<h4>${title}</h4>${body}`:"";
+ let h=`<div class="center">ROCKWILLS · WILL PLANNING WORKSPACE</div>
+ <h2>LAST WILL & TESTAMENT</h2>
+ <div class="center">FULL CLIENT PLANNING SUMMARY / 完整客户遗嘱规划摘要</div>`;
+
+ const personalRows=[
+  ["Testator Name / 姓名",p.name],["NRIC / Passport No.",p.nric],["Date of Birth",p.dob],
+  ["Address / 住址",p.address],["Marital Status",p.marital],["Signature",p.signature],
+  ["HP No.",p.phone],["Email Address",p.email],["Can Testator Read English?",p.readEnglish],
+  ["Need Oral Translation?",p.translation],["Translator Name",p.translator],
+  ["Translator IC / Passport",p.translatorId],["Language / Dialect",p.language],
+  ["Estimated Will Fee (entered)",p.estimatedFee],["Custody",p.custody],
+  ["Franchisee Name",d.franchisee.name],["Franchisee Code",d.franchisee.code],
+  ["Franchisee HP No.",d.franchisee.phone],["Franchisee Email",d.franchisee.email],
+  ["REP / Prepared By",d.franchisee.repName],["Planning Date",p.planDate]
+ ];
+ h+=section("1. TESTATOR PARTICULARS / 立遗嘱者个人资料 · 4@",table(personalRows));
+
+ let executorBody=peopleTable(d.appointments.executors,"E",[0,2]);
+ if(has(d.appointments.rwt))executorBody+=table([["Rockwills Trustee Appointment",d.appointments.rwt]]);
+ h+=section("2. EXECUTORS / TRUSTEES · SECTION A",executorBody);
+ let guardianBody=peopleTable(d.appointments.guardians,"G",[0]);
+ if(d.guardianPayment.enabled){
+  guardianBody+=table([["Payment to Guardian?",d.guardianPayment.yesNo],["Payment Frequency",d.guardianPayment.frequency],["Please Specify",d.guardianPayment.details]]);
+ }
+ h+=section("3. GUARDIANS · SECTION B",guardianBody);
+ h+=section("4. DIGITAL FACILITATORS · SECTION C",peopleTable(d.appointments.facilitators,"D",[0]));
+
+ const bRows=d.beneficiaries.map((b,i)=>b&&Object.values(b).some(has)?[
+  `B${i+1}`,`${[b.name,b.id,b.relationship,b.nationality].filter(has).map(esc).join(" · ")}`
+ ]:null).filter(Boolean);
+ h+=section("5. BENEFICIARY DIRECTORY · SECTION D",bRows.length?`<table>${bRows.map(x=>`<tr><td>${x[0]}</td><td>${x[1]}</td></tr>`).join("")}</table>`:"");
+
+ const common=[];
+ if(d.gifts.common.jointBank)common.push(["Joint Bank Accounts", "To respective joint account holders"]);
+ if(d.gifts.common.jointUnitTrust)common.push(["Joint Unit Trust Accounts","To respective joint account holders"]);
+ h+=section("6. COMMON GIFTS · SECTION E",common.length?`<table>${common.map(x=>`<tr><td>${x[0]}</td><td>${x[1]}</td></tr>`).join("")}</table>`:"");
+
+ let gifts="";
+ giftDefs.forEach(([id,label,q])=>{
+  const g=d.gifts.specific[id];if(!g?.enabled)return;
+  const alloc=allocRows(g.alloc);
+  const details=has(g.details)?table([["Asset Details",g.details]]):"";
+  gifts+=`<div style="margin:8px 0"><b>${esc(label)}</b>${details}${alloc?`<table>${alloc}</table>`:""}</div>`;
+ });
+ h+=section("7. SPECIFIC GIFTS & ASSETS · SECTION F",gifts);
+
+ let props="";
+ d.properties.forEach((x,i)=>{
+  const details=table([["Property Type",x.type],["Full Address / Title Details",x.details],["Ownership",x.ownership],["Co-owner Name",x.coOwner]]);
+  const alloc=allocRows(x.alloc);
+  if(details||alloc)props+=`<div><b>Property ${i+1}</b>${details}${alloc?`<table>${alloc}</table>`:""}</div>`;
+ });
+ h+=section("8. IMMOVABLE PROPERTIES · SECTION G",props);
+
+ let businesses="";
+ d.businesses.forEach((x,i)=>{
+  const details=table([["Company / Business Name",x.name],["Registration No.",x.reg],["Business Type",x.type],["Remarks",x.remarks]]);
+  const alloc=allocRows(x.alloc);
+  if(details||alloc)businesses+=`<div><b>Business Interest ${i+1}</b>${details}${alloc?`<table>${alloc}</table>`:""}</div>`;
+ });
+ h+=section("9. BUSINESS / COMPANY INTERESTS · SECTION H",businesses);
+
+ const residuaryNames=[
+  ["Main Beneficiaries","main"],["First Substitute Beneficiaries","sub1"],
+  ["Second Substitute Beneficiaries","sub2"],["Third Substitute Beneficiaries","sub3"],
+  ["Fourth Substitute Beneficiaries","sub4"]
+ ];
+ const residuaryRows=residuaryNames.filter(x=>allocContent(d.residuary[x[1]])).map(x=>`<tr><td>${x[0]}</td><td>${allocContent(d.residuary[x[1]])}</td></tr>`).join("");
+ h+=section("10. RESIDUARY ESTATE · SECTION I",residuaryRows?`<table>${residuaryRows}</table>`:"");
+
+ let otherRows=[];
+ if(d.other.comm.enabled)otherRows.push(["Commorientes – Survival Period",has(d.other.comm.days)?`${d.other.comm.days} days`:"Selected"]);
+ if(d.other.futureChildren.enabled)otherRows.push(["Include Future Children",d.other.futureChildren.include],["Particular Spouse – Name",d.other.futureChildren.spouseName],["Spouse NRIC",d.other.futureChildren.spouseNric],["Future Children Instructions",d.other.futureChildren.notes]);
+ if(d.other.futureMarriage.enabled)otherRows.push(["Expectation of Future Marriage – Fiancé(e)",d.other.futureMarriage.name],["Fiancé(e) NRIC",d.other.futureMarriage.nric]);
+ if(d.other.exclusion.enabled)otherRows.push(["Excluded Person – Name",d.other.exclusion.name],["Relationship",d.other.exclusion.relationship],["Reason(s) for Exclusion",d.other.exclusion.reason]);
+ h+=section("11. OTHER MATTERS · SECTION J",table(otherRows));
+
+ const selectedOptional=optionalDefs.filter(([id])=>d.optional[id]?.enabled);
+ h+=section("12. OPTIONAL CLAUSES · SECTION K",selectedOptional.length?`<ul>${selectedOptional.map(([id,label,q])=>`<li>${esc(label)} (${q}@)</li>`).join("")}</ul>`:"");
+
+ const wishesRows=[
+  ["Funeral Arrangements",d.wishes.funeral],["Terms of Endearment",d.wishes.endearment],
+  ["Any Other Instruction",d.wishes.instruction]
+ ].filter(([label,x])=>x?.enabled&&has(x.text)).map(([label,x])=>[label,x.text]);
+ h+=section("13. OTHER SPECIFIC ITEMS – MY WISHES · SECTION L",table(wishesRows));
+
+ let trustRows=[];
+ if(d.trusts.movable.enabled)trustRows.push(
+  ["Movable Trust – Beneficiaries",d.trusts.movable.beneficiaries],
+  ["Movable Trust – Purposes",d.trusts.movable.purposes],
+  ["Movable Trust – Assets to Set Aside",d.trusts.movable.assets],
+  ["Movable Trust – Duration",d.trusts.movable.duration],
+  ["Movable Trust – Payment to Beneficiaries",d.trusts.movable.payment],
+  ["Movable Trust – Balance Beneficiaries",d.trusts.movable.balance]
+ );
+ if(d.trusts.immovable.enabled)trustRows.push(
+  ["Immovable Trust – Right of Occupation",d.trusts.immovable.occupation],
+  ["Immovable Trust – Rental Income Beneficiaries",d.trusts.immovable.rental],
+  ["Immovable Trust – Assets to Set Aside",d.trusts.immovable.assets],
+  ["Immovable Trust – Duration",d.trusts.immovable.duration],
+  ["Immovable Trust – Trustee Powers",d.trusts.immovable.powers],
+  ["Immovable Trust – End Beneficiaries",d.trusts.immovable.balance]
+ );
+ h+=section("14. TESTAMENTARY TRUST · SECTION M",table(trustRows));
+ h+=section("15. APPOINTMENT OF PROTECTOR",peopleTable(d.protectors,"P",[0]));
+
+ const signRows=[
+  ["Testator Full Name",d.signoff.testatorName],["Testator NRIC / Passport",d.signoff.testatorNric],
+  ["Testator Declaration Date",d.signoff.testatorDate],["REP Name",d.signoff.repName],
+  ["REP Verification Date",d.signoff.repDate],["Original NRIC / Passport Sighted?",d.signoff.idSighted]
+ ];
+ h+=section("16. TESTATOR DECLARATION & REP VERIFICATION",table(signRows));
+
+ let feeRows=[
+  ["Estimated Clause Count",n],["Will Category",f[0]],
+  ["Base Will Writing Fee",typeof f[1]==="number"?"RM "+f[1].toLocaleString("en-MY"):f[1]]
+ ];
+ if(rwtFee)feeRows.push(["Rockwills as Substitute Executor Fee","RM 120"]);
+ feeRows.push(["Total Estimated Fee",typeof total==="number"?"RM "+total.toLocaleString("en-MY"):total]);
+ if(has(p.custody))feeRows.push(["Custody",p.custody]);
+ h+=section("17. PLANNING ESTIMATE",table(feeRows));
+
+ h+=`<p class="footnote">This is a planning summary only and is not the final Will or legal advice. Final clauses, wording, eligibility and fees are subject to Rockwills' review and confirmation. 本摘要仅供遗嘱规划及讨论用途，并非正式遗嘱或法律意见。最终条款、内容及费用须以 Rockwills 审核确认为准。</p>`;
+ if(internal){
+  h+=`<h4>INTERNAL CLAUSE AUDIT / 内部条款计算明细</h4><table><tr><th>Section</th><th>Clause Item</th><th>Qty</th><th>Basis</th></tr>${clauseRows().map(x=>`<tr><td>${esc(x.sec)}</td><td>${esc(x.label)}</td><td>${x.qty}</td><td>${esc(x.basis)}</td></tr>`).join("")}<tr><td colspan="2"><b>Total</b></td><td><b>${n}</b></td><td>${esc(f[2])}</td></tr></table>`;
+ }
+ return h;
 }
 function renderPreview(internal=false){
  const box=document.getElementById("reportPreview");
@@ -239,6 +417,7 @@ function renderPreview(internal=false){
  }
 }
 function printPdf(internal){
+ syncAllocationControls();
  // Same-tab rendering avoids iOS Safari's blank about:blank popup issue.
  go("report");
  renderPreview(internal);
@@ -271,6 +450,7 @@ function makeRecord(data,id){
  return {id:String(id||Date.now()),name:data?.personal?.name||"Untitled Client",nric:data?.personal?.nric||"",updated:new Date().toISOString(),data};
 }
 function save(){
+ syncAllocationControls();
  let recs=readRecords(),id=activeId||("client-"+Date.now()+"-"+Math.random().toString(36).slice(2,7));
  activeId=id;
  let rec=makeRecord(d,id),i=recs.findIndex(x=>String(x.id)===String(id));
