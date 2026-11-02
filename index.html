@@ -105,7 +105,7 @@
       <button class="btn primary" id="generateFilledFormBtn">Generate & Preview Filled Form</button>
       <a class="btn" id="downloadFilledFormBtn" href="#" download="Completed_Rockwills_Will_Form.pdf" style="pointer-events:none;opacity:.45">Download Completed Form PDF</a>
     </div>
-    <p class="tiny" id="filledFormStatus">V2.7 uses corrected field positions for the original 8-page form, including clean property-detail cells and signature fields after their labels. Preview every page before submission.</p>
+    <p class="tiny" id="filledFormStatus">V2.9 adjusts the Page 1 executor appointment marks and Page 4 property-detail layout for the original 8-page form, including clean property-detail cells and signature fields after their labels. Preview every page before submission.</p>
     <div id="filledFormPreviewWrap" class="hidden" style="margin-top:14px">
       <iframe id="filledFormPreview" title="Completed Rockwills Will Draft Form Preview" style="width:100%;height:75vh;border:1px solid var(--line);border-radius:12px;background:#fff"></iframe>
     </div>
@@ -715,9 +715,9 @@ function createFormCanvases(){
  }
  const ex=d.appointments.executors||[];
  const exY=[361,445,523,609];
- ex.forEach((v,i)=>person(1,168,exY[i],v,{nameW:350,idW:245,relX:432,relW:125,idDy:20,addressDy:50,addressW:390,addressH:15,subX:413,jointX:500,arrDy:0}));
- if(d.appointments.rwt==="Sole Executor")mark(1,270,718);
- if(d.appointments.rwt==="Substitute to the above")mark(1,400,718);
+ ex.forEach((v,i)=>person(1,168,exY[i],v,{nameW:350,idW:245,relX:432,relW:125,idDy:20,addressDy:50,addressW:390,addressH:15,subX:436,jointX:536,arrDy:0}));
+ if(d.appointments.rwt==="Sole Executor")mark(1,375,718);
+ if(d.appointments.rwt==="Substitute to the above")mark(1,541,718);
 
  // PAGE 2 – Guardians, digital facilitators and B1–B10.
  const gs=d.appointments.guardians||[];
@@ -764,11 +764,12 @@ function createFormCanvases(){
   if(!v||!(v.type||v.details||v.ownership||v.coOwner||v.alloc))return;
   const top=[95,222,349][i]||95;
   const rowH=126;
-  whiteout(4,63,top,190,rowH);
-  add(4,68,top+7,178,11,`${i+1}  1@ Property Details`,{size:6.7,bold:true});
-  if(v.type)add(4,68,top+23,178,12,`Type: ${v.type}`,{size:6.3});
-  if(v.details)add(4,68,top+40,178,57,v.details,{size:6.1,min:5.4,lineHeight:7.6});
-  if(v.coOwner)add(4,68,top+105,178,12,`Co-owner: ${v.coOwner}`,{size:5.7});
+  // Keep the original printed "1@ Property Details" line intact.
+  // Clear only the writable area below that heading, within the property-description cell.
+  whiteout(4,63,top+19,190,rowH-20);
+  if(v.type)add(4,68,top+25,178,12,`Type: ${v.type}`,{size:6.3});
+  if(v.details)add(4,68,top+43,178,49,v.details,{size:6.1,min:5.4,lineHeight:7.6});
+  if(v.coOwner)add(4,68,top+106,178,12,`Co-owner: ${v.coOwner}`,{size:5.7});
   if(v.ownership==="Sole Name")mark(4,274,top+5);
   if(v.ownership==="Joint Name")mark(4,314,top+5);
   add(4,346,top+12,64,100,allocationCompact(d.properties?.[i]?.alloc?.main||v.alloc?.main),{size:5.8});
