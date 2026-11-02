@@ -105,7 +105,7 @@
       <button class="btn primary" id="generateFilledFormBtn">Generate & Preview Filled Form</button>
       <a class="btn" id="downloadFilledFormBtn" href="#" download="Completed_Rockwills_Will_Form.pdf" style="pointer-events:none;opacity:.45">Download Completed Form PDF</a>
     </div>
-    <p class="tiny" id="filledFormStatus">The original 8-page form layout and wording are preserved. Only information available in this App will be inserted; unavailable fields and all signature lines remain blank.</p>
+    <p class="tiny" id="filledFormStatus">V2.7 uses corrected field positions for the original 8-page form, including clean property-detail cells and signature fields after their labels. Preview every page before submission.</p>
     <div id="filledFormPreviewWrap" class="hidden" style="margin-top:14px">
       <iframe id="filledFormPreview" title="Completed Rockwills Will Draft Form Preview" style="width:100%;height:75vh;border:1px solid var(--line);border-radius:12px;background:#fff"></iframe>
     </div>
@@ -131,7 +131,7 @@ const blank=()=>({
  trusts:{movable:{enabled:false},immovable:{enabled:false}},protectors:[{},{}],
  signoff:{testatorName:"",testatorNric:"",testatorDate:"",repName:"",repDate:"",idSighted:""}
 });
-const APP_VERSION="2.6.0";
+const APP_VERSION="2.7.0";
 const DB_KEY="willStudioV2Records";
 const DB_META_KEY="willStudioV2Meta";
 let d=blank(),activeId=null,page="overview";
@@ -616,8 +616,16 @@ function createFormCanvases(){
    const words=String(txt).split(/\s+/);let line="";
    for(const word of words){
     const test=line?line+" "+word:word;
-    if(ctx.measureText(test).width<=maxWidth||!line){line=test;continue;}
-    lines.push(line);line=word;
+    if(ctx.measureText(test).width<=maxWidth){line=test;continue;}
+    if(line)lines.push(line);
+    line="";
+    if(ctx.measureText(word).width<=maxWidth){line=word;continue;}
+    let piece="";
+    for(const ch of word){
+     if(piece&&ctx.measureText(piece+ch).width>maxWidth){lines.push(piece);piece=ch;}
+     else piece+=ch;
+    }
+    line=piece;
    }
    if(line)lines.push(line);
   };
@@ -639,6 +647,7 @@ function createFormCanvases(){
   ctx.restore();
  };
  const mark=(pg,x,y)=>add(pg,x,y,12,12,"X",{size:9,bold:true,single:true});
+ const whiteout=(pg,x,y,w,h)=>{const ctx=canvases[pg-1].ctx;ctx.save();ctx.fillStyle="#fff";ctx.fillRect(x,y,w,h);ctx.restore();};
  const person=(pg,x,y,p,opts={})=>{
   if(!p)return;
   add(pg,x,y,opts.nameW||200,11,p.name,{single:true});
@@ -651,10 +660,10 @@ function createFormCanvases(){
   if(p.arrangement==="Joint")mark(pg,opts.jointX||505,y+(opts.arrDy||0));
  };
  // PAGE 1 – Franchisee and testator particulars.
- add(1,185,70,175,10,d.franchisee.name,{single:true});
- add(1,365,70,160,10,d.franchisee.code,{single:true});
- add(1,185,84,175,10,d.franchisee.phone,{single:true});
- add(1,365,84,160,10,d.franchisee.email,{single:true});
+ add(1,185,91,145,10,d.franchisee.name,{single:true});
+ add(1,438,91,130,10,d.franchisee.code,{single:true});
+ add(1,185,108,145,10,d.franchisee.phone,{single:true});
+ add(1,438,108,130,10,d.franchisee.email,{single:true});
  const p=d.personal||{};
  add(1,185,159,365,12,p.name,{single:true});
  add(1,185,174,220,11,p.nric,{single:true});
@@ -664,39 +673,39 @@ function createFormCanvases(){
  if(maritalX[p.marital])mark(1,maritalX[p.marital],219);
  const sigX={"Normal Signature":190,"Thumbprint":275};
  if(sigX[p.signature])mark(1,sigX[p.signature],235);
- add(1,190,252,140,10,p.phone,{single:true});
- add(1,340,252,205,10,p.email,{single:true});
- if(p.readEnglish) add(1,440,272,90,10,p.readEnglish.toUpperCase(),{single:true,bold:true});
- if(p.translation) add(1,70,272,140,10,"Oral translation: "+p.translation,{single:true});
- add(1,285,286,145,10,p.translator,{single:true});
- add(1,445,286,105,10,p.translatorId,{single:true});
- add(1,300,299,180,10,p.language,{single:true});
+ add(1,220,252,125,10,p.phone,{single:true});
+ add(1,445,252,115,10,p.email,{single:true});
+ if(p.readEnglish==="Yes")mark(1,455,272);
+ if(p.readEnglish==="No")mark(1,495,272);
+ add(1,300,286,145,10,p.translator,{single:true});
+ add(1,470,286,90,10,p.translatorId,{single:true});
+ add(1,300,299,250,10,p.language,{single:true});
  const estimated=totalEstimatedFee();
  const estimatedText=(typeof estimated==="number")
   ? `RM ${estimated.toLocaleString("en-MY")}${rwtSubstituteFee()?" incl. RM120 RWT Substitute":""}`
   : (p.estimatedFee||estimated);
  add(1,185,313,145,10,estimatedText,{single:true,size:6.2,min:5.2});
  if(p.custody){
-  const cx={Annual:445,Lifetime:490,"Lifetime Plus":535};
-  mark(1,cx[p.custody]||445,313);
+  const cx={Annual:400,Lifetime:455,"Lifetime Plus":520};
+  mark(1,cx[p.custody]||400,313);
  }
  const ex=d.appointments.executors||[];
  const exY=[361,445,523,609];
- ex.forEach((v,i)=>person(1,168,exY[i],v,{nameW:285,idW:270,relX:335,relW:180,idDy:20,addressDy:48,addressW:400,addressH:15,subX:420,jointX:500,arrDy:0}));
+ ex.forEach((v,i)=>person(1,168,exY[i],v,{nameW:350,idW:245,relX:432,relW:125,idDy:20,addressDy:50,addressW:390,addressH:15,subX:420,jointX:500,arrDy:0}));
  if(d.appointments.rwt==="Sole Executor")mark(1,270,718);
  if(d.appointments.rwt==="Substitute to the above")mark(1,400,718);
 
  // PAGE 2 – Guardians, digital facilitators and B1–B10.
  const gs=d.appointments.guardians||[];
- gs.forEach((v,i)=>person(2,170,i===0?51:145,v,{nameW:300,idW:260,relX:335,relW:170,idDy:19,addressDy:47,addressW:420,addressH:18,subX:420,jointX:500}));
+ gs.forEach((v,i)=>person(2,170,i===0?51:137,v,{nameW:350,idW:245,relX:432,relW:125,idDy:19,addressDy:49,addressW:390,addressH:18,subX:420,jointX:500}));
  if(d.guardianPayment?.enabled){
-  mark(2,56,229);
-  if(d.guardianPayment.yesNo) add(2,245,229,70,10,d.guardianPayment.yesNo,{single:true});
-  if(d.guardianPayment.frequency)add(2,190,246,330,10,d.guardianPayment.frequency,{single:true});
-  add(2,145,260,350,10,d.guardianPayment.details,{single:true});
+  if(d.guardianPayment.yesNo==="Yes")mark(2,450,229);
+  if(d.guardianPayment.yesNo==="No")mark(2,490,229);
+  if(d.guardianPayment.frequency)add(2,250,247,300,10,d.guardianPayment.frequency,{single:true});
+  add(2,145,263,405,10,d.guardianPayment.details,{single:true});
  }
  const dfs=d.appointments.facilitators||[];
- dfs.forEach((v,i)=>person(2,170,i===0?301:375,v,{nameW:285,idW:260,relX:335,relW:170,idDy:19,emailDy:35,emailW:260,phoneX:335,phoneW:170,addressDy:52,addressW:420,addressH:16,subX:420,jointX:500}));
+ dfs.forEach((v,i)=>person(2,170,i===0?301:366,v,{nameW:350,idW:245,relX:432,relW:125,idDy:19,emailDy:35,emailW:245,phoneX:432,phoneW:125,addressDy:53,addressW:390,addressH:16,subX:420,jointX:500}));
  (d.beneficiaries||[]).slice(0,10).forEach((b,i)=>{
   const y=500+i*22.1;
   add(2,80,y,175,13,b.name,{single:true});
@@ -709,54 +718,59 @@ function createFormCanvases(){
  if(d.gifts.common.jointBank)mark(3,505,81);
  if(d.gifts.common.jointUnitTrust)mark(3,505,114);
  const giftRows=[
-  ["bank",228],["unitTrust",255],["epf",284],["insurance",330],["vehicles",360],
-  ["safe",400],["jewellery",442],["club",461],["futureProperty",483],
-  ["bursa",516],["sgx",550],["digital",590],["custom15",628],["custom16",654],
-  ["custom17",680],["custom18",706],["custom19",732]
+  ["bank",226],["unitTrust",253],["epf",284],["insurance",330],["vehicles",361],
+  ["safe",401],["jewellery",443],["club",462],["futureProperty",488],
+  ["bursa",516],["sgx",549],["digital",590],["custom15",628],["custom16",654],
+  ["custom17",680],["custom18",705],["custom19",732]
  ];
  const giftRowMeta=new Map(giftDefs.map((x,i)=>[x[0],{label:x[1],q:x[2]}]));
  giftRows.forEach(([id,y])=>{
   const g=d.gifts.specific?.[id];if(!g?.enabled)return;
   const meta=giftRowMeta.get(id);
-  if(id.startsWith("custom")&&g.details)add(3,78,y-7,270,18,g.details,{size:6.6});
-  else if((id==="safe"||id==="digital")&&g.details)add(3,78,y+4,270,20,g.details,{size:6.3});
-  add(3,338,y,74,24,allocationCompact(g.alloc?.main),{size:6.2});
-  add(3,414,y,78,24,allocationCompact(g.alloc?.sub1),{size:6.2});
-  add(3,498,y,70,24,allocationCompact(g.alloc?.sub2),{size:6.2});
+  if(id==="safe"&&g.details)add(3,128,394,165,32,g.details,{size:6.0});
+  else if(id==="digital"&&g.details)add(3,128,597,165,17,g.details,{size:6.0});
+  else if(id.startsWith("custom")&&g.details)add(3,128,y,165,18,g.details,{size:6.0});
+  add(3,345,y-5,65,26,allocationCompact(g.alloc?.main),{size:5.8});
+  add(3,422,y-5,65,26,allocationCompact(g.alloc?.sub1),{size:5.8});
+  add(3,505,y-5,65,26,allocationCompact(g.alloc?.sub2),{size:5.8});
  });
 
  // PAGE 4 – Immovable property and business interests.
  (d.properties||[]).forEach((v,i)=>{
   if(!v||!(v.type||v.details||v.ownership||v.coOwner||v.alloc))return;
-  const top=[98,226,353][i]||98;
-  add(4,72,top,180,10,v.type,{single:true});
-  add(4,72,top+15,178,92,v.details,{size:6.6});
-  if(v.ownership==="Sole Name")mark(4,266,top+3);
-  if(v.ownership==="Joint Name")mark(4,300,top+3);
-  if(v.coOwner)add(4,72,top+105,175,12,"Co-owner: "+v.coOwner,{size:6.4});
-  add(4,338,top+6,74,90,allocationCompact(v.alloc?.main),{size:6.2});
-  add(4,414,top+6,78,90,allocationCompact(v.alloc?.sub1),{size:6.2});
-  add(4,498,top+6,72,90,allocationCompact(v.alloc?.sub2),{size:6.2});
+  const top=[95,222,349][i]||95;
+  const rowH=126;
+  whiteout(4,64,top+2,187,rowH-4);
+  add(4,68,top+5,178,10,`${i+1}  1@ Property Details`,{size:6.8,bold:true});
+  if(v.type)add(4,68,top+20,178,12,`Type: ${v.type}`,{size:6.4});
+  if(v.details)add(4,68,top+35,178,65,v.details,{size:6.2,lineHeight:8});
+  if(v.coOwner)add(4,68,top+104,178,12,`Co-owner: ${v.coOwner}`,{size:5.8});
+  if(v.ownership==="Sole Name")mark(4,274,top+5);
+  if(v.ownership==="Joint Name")mark(4,314,top+5);
+  add(4,346,top+12,64,100,allocationCompact(v.alloc?.main),{size:5.8});
+  add(4,423,top+12,64,100,allocationCompact(v.alloc?.sub1),{size:5.8});
+  add(4,506,top+12,64,100,allocationCompact(v.alloc?.sub2),{size:5.8});
  });
  (d.businesses||[]).forEach((v,i)=>{
   if(!v||!(v.name||v.reg||v.type||v.remarks||v.alloc))return;
   const y=551+i*25.8;
   const label=[v.name,v.reg,v.type,v.remarks].filter(Boolean).join(" · ");
-  add(4,72,y,190,22,label,{size:6.5});
-  add(4,338,y,74,21,allocationCompact(v.alloc?.main),{size:6.1});
-  add(4,414,y,78,21,allocationCompact(v.alloc?.sub1),{size:6.1});
-  add(4,498,y,72,21,allocationCompact(v.alloc?.sub2),{size:6.1});
+  add(4,110,y,220,22,label,{size:5.7,lineHeight:7});
+  add(4,346,y,64,21,allocationCompact(v.alloc?.main),{size:5.6});
+  add(4,423,y,64,21,allocationCompact(v.alloc?.sub1),{size:5.6});
+  add(4,506,y,64,21,allocationCompact(v.alloc?.sub2),{size:5.6});
  });
 
  // PAGE 5 – Residuary estate and other matters.
  const residRows=[["main",92],["sub1",126],["sub2",164],["sub3",205],["sub4",244]];
- residRows.forEach(([key,y])=>add(5,230,y,225,30,allocationCompact(d.residuary?.[key]),{size:7}));
+ residRows.forEach(([key,y])=>add(5,258,y,195,30,allocationCompact(d.residuary?.[key]),{size:6.6}));
  if(d.other.comm.enabled){mark(5,54,302);add(5,430,302,55,12,d.other.comm.days||"30",{single:true});}
  if(d.other.futureChildren.enabled){
   mark(5,54,378);
-  add(5,255,433,300,30,[d.other.futureChildren.spouseName,d.other.futureChildren.spouseNric].filter(Boolean).join(" / "),{size:7});
-  if(d.other.futureChildren.include)add(5,145,412,100,10,d.other.futureChildren.include,{single:true});
-  if(d.other.futureChildren.notes)add(5,70,458,480,24,d.other.futureChildren.notes,{size:6.5});
+  add(5,255,433,285,11,d.other.futureChildren.spouseName,{single:true});
+  add(5,255,447,285,11,d.other.futureChildren.spouseNric,{single:true});
+  if(d.other.futureChildren.include)add(5,330,412,190,10,d.other.futureChildren.include,{single:true});
+  if(d.other.futureChildren.notes)add(5,260,438,275,28,d.other.futureChildren.notes,{size:6.0});
  }
  if(d.other.futureMarriage.enabled){
   mark(5,54,490);
@@ -765,15 +779,15 @@ function createFormCanvases(){
  }
  if(d.other.exclusion.enabled){
   mark(5,54,555);
-  add(5,75,670,290,12,d.other.exclusion.name,{single:true});
-  add(5,385,670,150,12,d.other.exclusion.relationship,{single:true});
-  add(5,75,704,460,25,d.other.exclusion.reason,{size:6.6});
+  add(5,220,670,160,12,d.other.exclusion.name,{single:true});
+  add(5,455,670,90,12,d.other.exclusion.relationship,{single:true});
+  add(5,220,704,320,25,d.other.exclusion.reason,{size:6.2});
  }
 
  // PAGE 6 – Optional clause ticks, wishes, declaration details (signature left blank).
  const optionalRows=[
-  ["conscientious",47],["omission",86],["contest",115],["bankrupt",164],
-  ["coma",190],["insurancePower",216],["minor",244],["comaTrust",277]
+  ["conscientious",53],["omission",91],["contest",119],["bankrupt",170],
+  ["coma",197],["insurancePower",223],["minor",250],["comaTrust",284]
  ];
  optionalRows.forEach(([id,y])=>{if(d.optional?.[id]?.enabled)mark(6,53,y);});
  const wishRows=[["funeral",326],["endearment",391],["instruction",450]];
@@ -782,11 +796,11 @@ function createFormCanvases(){
  });
  const signName=d.signoff.testatorName||p.name;
  const signId=d.signoff.testatorNric||p.nric;
- add(6,72,682,250,11,signName,{single:true});
- add(6,72,704,250,11,signId,{single:true});
- add(6,72,726,250,11,formDate(d.signoff.testatorDate),{single:true});
- add(6,345,725,205,11,d.signoff.repName||d.franchisee.repName,{single:true});
- add(6,345,746,205,11,formDate(d.signoff.repDate),{single:true});
+ add(6,130,677,125,11,signName,{single:true});
+ add(6,145,694,110,11,signId,{single:true});
+ add(6,95,710,160,11,formDate(d.signoff.testatorDate),{single:true});
+ add(6,370,710,160,11,d.signoff.repName||d.franchisee.repName,{single:true});
+ add(6,370,726,160,11,formDate(d.signoff.repDate),{single:true});
 
  // PAGE 7 – Movable assets testamentary trust.
  if(d.trusts.movable.enabled){
@@ -802,15 +816,15 @@ function createFormCanvases(){
    .forEach(([k,y,h])=>add(8,425,y,125,h,t[k],{size:6.7}));
  }
  (d.protectors||[]).forEach((v,i)=>{
-  const y=i===0?454:529;
-  person(8,72,y,v,{nameW:300,idW:280,relX:335,relW:180,idDy:17,addressDy:43,addressW:430,addressH:15,subX:420,jointX:500});
+  const y=i===0?458:524;
+  person(8,158,y,v,{nameW:390,idW:245,relX:432,relW:125,idDy:20,addressDy:44,addressW:395,addressH:15,subX:420,jointX:500});
  });
  // Duplicate declaration names/IDs on page 8; signature strokes remain blank.
- add(8,72,674,250,11,signName,{single:true});
- add(8,72,697,250,11,signId,{single:true});
- add(8,72,719,250,11,formDate(d.signoff.testatorDate),{single:true});
- add(8,345,697,205,11,d.signoff.repName||d.franchisee.repName,{single:true});
- add(8,345,728,205,11,formDate(d.signoff.repDate),{single:true});
+ add(8,130,674,125,11,signName,{single:true});
+ add(8,145,697,110,11,signId,{single:true});
+ add(8,95,719,160,11,formDate(d.signoff.testatorDate),{single:true});
+ add(8,370,719,160,11,d.signoff.repName||d.franchisee.repName,{single:true});
+ add(8,370,736,160,11,formDate(d.signoff.repDate),{single:true});
  return canvases;
 }
 async function generateCompletedWillForm(){
