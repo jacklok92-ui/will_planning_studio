@@ -5,7 +5,7 @@
 <meta name="theme-color" content="#17271f"><title>Will Planning Studio V2</title>
 <style>
 :root{--ink:#1e2b24;--muted:#718078;--line:#e1e8e1;--bg:#f3f6f2;--green:#254b39;--pale:#e6efe7;--gold:#a98248;--white:#fff;--red:#a33f36}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.48 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}.top{position:sticky;top:0;z-index:20;background:#17271f;color:white;padding:13px 18px;display:flex;justify-content:space-between;align-items:center;gap:10px;box-shadow:0 4px 16px #12251a22}.brand{display:flex;align-items:center;gap:10px}.logo{width:36px;height:36px;border:1px solid #91a396;border-radius:11px;display:grid;place-items:center;font:24px Georgia;color:#e2d0a9}.brand b{display:block;font-size:12px;letter-spacing:.14em}.brand small{color:#bdc9c0;font-size:10px;letter-spacing:.08em}.actions{display:flex;gap:7px;flex-wrap:wrap}.btn{border:1px solid var(--line);border-radius:9px;background:white;color:var(--ink);padding:9px 12px;font-weight:650;font-size:12px}.btn.primary{background:var(--green);border-color:var(--green);color:white}.btn.dark{background:#34483b;color:#fff;border-color:#607366}.btn.ghost{background:transparent;color:#fff;border-color:#64776a}.btn.red{color:var(--red)}.wrap{max-width:1450px;margin:auto;display:grid;grid-template-columns:230px minmax(0,1fr);gap:18px;padding:18px}.side{position:sticky;top:78px;align-self:start;background:white;border:1px solid var(--line);border-radius:15px;padding:10px}.side .label{padding:8px 9px;color:var(--muted);font-size:10px;letter-spacing:.14em;font-weight:700}.nav{padding:9px;border-radius:9px;display:flex;align-items:center;gap:9px;color:#5d6b62;font-size:12px;cursor:pointer;margin:2px 0}.nav.active{background:var(--pale);color:var(--green);font-weight:750}.n{font-size:10px;background:#f0f3ef;border-radius:6px;padding:4px 6px}.side .hint{margin:12px 4px 3px;background:#f6f8f5;border-radius:9px;padding:10px;color:var(--muted);font-size:10px}.main{min-width:0}.heading{margin:4px 0 14px}.eyebrow{font-size:10px;letter-spacing:.16em;color:var(--gold);font-weight:800}.heading h1{font:500 27px Georgia;margin:5px 0}.heading p{margin:0;color:var(--muted);font-size:12px}.panel{background:white;border:1px solid var(--line);border-radius:14px;padding:17px;margin-bottom:13px;box-shadow:0 5px 20px #1c3a2810}.panel h2{font:500 19px Georgia;margin:0 0 3px}.panel h3{font-size:13px;margin:0 0 8px}.sub{color:var(--muted);font-size:11px;margin:0 0 14px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}.grid.four{grid-template-columns:repeat(4,minmax(0,1fr))}.field{display:flex;flex-direction:column;gap:4px;min-width:0}.field.full{grid-column:1/-1}.field label{font-size:11px;color:#59675e;font-weight:700}.field input,.field select,.field textarea{width:100%;min-width:0;padding:9px 10px;border:1px solid #dce4dc;border-radius:8px;background:white;color:var(--ink);outline:none}.field textarea{min-height:68px;resize:vertical}.field input:focus,.field select:focus,.field textarea:focus{border-color:#7ca18a;box-shadow:0 0 0 3px #eaf2eb}.muted{color:var(--muted)}.tiny{font-size:10px;color:var(--muted)}.row{display:flex;align-items:center;justify-content:space-between;gap:10px}.check{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);padding:7px 9px;border-radius:8px;font-size:11px}.check input{accent-color:var(--green)}.item{border:1px solid var(--line);border-radius:11px;padding:12px;margin:9px 0}.itemhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px}.itemhead b{font-size:12px}.badge{font-size:10px;color:var(--green);background:var(--pale);border-radius:6px;padding:4px 7px;font-weight:700}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:13px}.stat{background:white;border:1px solid var(--line);border-radius:12px;padding:13px}.stat small{font-size:10px;color:var(--muted)}.stat strong{display:block;font:500 24px Georgia;margin:4px 0}.alloc{border:1px solid #e3e9e3;border-radius:10px;padding:10px;margin-top:8px;background:#fbfcfa}.allochead{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:7px}.allochead b{font-size:11px}.allocrow{display:grid;grid-template-columns:minmax(0,1fr) 90px 30px;gap:7px;align-items:center;margin:6px 0}.allocrow input,.allocrow select{min-width:0;width:100%;padding:7px;border:1px solid var(--line);border-radius:7px;background:white;font-size:11px}.allocrow .pct{text-align:right}.allocfoot{display:flex;justify-content:space-between;align-items:center;margin-top:7px;font-size:10px}.warn{color:var(--red);font-weight:700}.ok{color:var(--green);font-weight:700}.divider{height:1px;background:var(--line);margin:14px 0}.notice{background:#fff8e9;border:1px solid #f0dfbd;color:#725b31;padding:10px 12px;border-radius:9px;font-size:11px;margin-bottom:12px}.hidden{display:none!important}.pages{display:none}.pages.active{display:block}.footnav{display:flex;justify-content:space-between;margin:14px 0 28px}.report-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#f5f8f4;border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:12px}.preview{background:white;padding:24px;border:1px solid var(--line);border-radius:12px;max-width:900px;margin:auto}.preview h2{text-align:center;font:500 24px Georgia;margin:7px}.preview .center{text-align:center;color:#718078;font-size:10px}.preview h4{font-size:11px;letter-spacing:.1em;color:#997644;border-bottom:1px solid #e1e7e1;padding-bottom:5px;margin:20px 0 8px}.preview table{width:100%;border-collapse:collapse;font-size:11px}.preview td,.preview th{padding:6px;border-bottom:1px solid #e8ede8;text-align:left;vertical-align:top}.preview td:first-child{color:#6b776f}.preview ul{margin:5px 0;padding-left:20px}.preview li{font-size:11px;margin:3px 0}.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#17271f;color:white;padding:10px 15px;border-radius:9px;display:none;z-index:50;font-size:12px}.smallbtn{padding:6px 8px;font-size:10px}.footnote{font-size:9px;color:#7b867f;margin-top:12px}@media(max-width:850px){.wrap{grid-template-columns:1fr;padding:10px}.side{position:static;display:flex;overflow:auto;gap:3px;padding:7px}.side .label,.side .hint{display:none}.nav{white-space:nowrap;padding:8px}.top{padding:10px}.grid.four{grid-template-columns:repeat(2,1fr)}}@media(max-width:560px){.grid,.grid.three,.grid.four{grid-template-columns:1fr}.stats{grid-template-columns:repeat(3,1fr)}.stat{padding:9px}.stat strong{font-size:19px}.heading h1{font-size:23px}.panel{padding:13px}.brand small{display:none}.actions .optional{display:none}.allocrow{grid-template-columns:minmax(0,1fr) 75px 24px}}@media print{body{background:white}.top,.side,.no-print,.heading,.footnav{display:none!important}.wrap{display:block;padding:0}.panel{box-shadow:none;border:0;padding:0}.preview{border:0;padding:0;max-width:none}.pages{display:none!important}.pages.active{display:block!important}#report{display:block!important}@page{size:A4;margin:14mm}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.48 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}.top{position:sticky;top:0;z-index:20;background:#17271f;color:white;padding:13px 18px;display:flex;justify-content:space-between;align-items:center;gap:10px;box-shadow:0 4px 16px #12251a22}.brand{display:flex;align-items:center;gap:10px}.logo{width:36px;height:36px;border:1px solid #91a396;border-radius:11px;display:grid;place-items:center;font:24px Georgia;color:#e2d0a9}.brand b{display:block;font-size:12px;letter-spacing:.14em}.brand small{color:#bdc9c0;font-size:10px;letter-spacing:.08em}.actions{display:flex;gap:7px;flex-wrap:wrap}.btn{border:1px solid var(--line);border-radius:9px;background:white;color:var(--ink);padding:9px 12px;font-weight:650;font-size:12px}.btn.primary{background:var(--green);border-color:var(--green);color:white}.btn.dark{background:#34483b;color:#fff;border-color:#607366}.btn.ghost{background:transparent;color:#fff;border-color:#64776a}.btn.red{color:var(--red)}.wrap{max-width:1450px;margin:auto;display:grid;grid-template-columns:230px minmax(0,1fr);gap:18px;padding:18px}.side{position:sticky;top:78px;align-self:start;background:white;border:1px solid var(--line);border-radius:15px;padding:10px}.side .label{padding:8px 9px;color:var(--muted);font-size:10px;letter-spacing:.14em;font-weight:700}.nav{padding:9px;border-radius:9px;display:flex;align-items:center;gap:9px;color:#5d6b62;font-size:12px;cursor:pointer;margin:2px 0}.nav.active{background:var(--pale);color:var(--green);font-weight:750}.n{font-size:10px;background:#f0f3ef;border-radius:6px;padding:4px 6px}.side .hint{margin:12px 4px 3px;background:#f6f8f5;border-radius:9px;padding:10px;color:var(--muted);font-size:10px}.main{min-width:0}.heading{margin:4px 0 14px}.eyebrow{font-size:10px;letter-spacing:.16em;color:var(--gold);font-weight:800}.heading h1{font:500 27px Georgia;margin:5px 0}.heading p{margin:0;color:var(--muted);font-size:12px}.panel{background:white;border:1px solid var(--line);border-radius:14px;padding:17px;margin-bottom:13px;box-shadow:0 5px 20px #1c3a2810}.panel h2{font:500 19px Georgia;margin:0 0 3px}.panel h3{font-size:13px;margin:0 0 8px}.sub{color:var(--muted);font-size:11px;margin:0 0 14px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}.grid.four{grid-template-columns:repeat(4,minmax(0,1fr))}.field{display:flex;flex-direction:column;gap:4px;min-width:0}.field.full{grid-column:1/-1}.field label{font-size:11px;color:#59675e;font-weight:700}.field input,.field select,.field textarea{width:100%;min-width:0;padding:9px 10px;border:1px solid #dce4dc;border-radius:8px;background:white;color:var(--ink);outline:none}.field textarea{min-height:68px;resize:vertical}.field input:focus,.field select:focus,.field textarea:focus{border-color:#7ca18a;box-shadow:0 0 0 3px #eaf2eb}.muted{color:var(--muted)}.tiny{font-size:10px;color:var(--muted)}.row{display:flex;align-items:center;justify-content:space-between;gap:10px}.check{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);padding:7px 9px;border-radius:8px;font-size:11px}.check input{accent-color:var(--green)}.item{border:1px solid var(--line);border-radius:11px;padding:12px;margin:9px 0}.itemhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px}.itemhead b{font-size:12px}.badge{font-size:10px;color:var(--green);background:var(--pale);border-radius:6px;padding:4px 7px;font-weight:700}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:13px}.stat{background:white;border:1px solid var(--line);border-radius:12px;padding:13px}.stat small{font-size:10px;color:var(--muted)}.stat strong{display:block;font:500 24px Georgia;margin:4px 0}.alloc{border:1px solid #e3e9e3;border-radius:10px;padding:10px;margin-top:8px;background:#fbfcfa}.allochead{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:7px}.allochead b{font-size:11px}.allocrow{display:grid;grid-template-columns:minmax(0,1fr) 90px 30px;gap:7px;align-items:center;margin:6px 0}.allocrow input,.allocrow select{min-width:0;width:100%;padding:7px;border:1px solid var(--line);border-radius:7px;background:white;font-size:11px}.allocrow .pct{text-align:right}.allocfoot{display:flex;justify-content:space-between;align-items:center;margin-top:7px;font-size:10px}.warn{color:var(--red);font-weight:700}.ok{color:var(--green);font-weight:700}.divider{height:1px;background:var(--line);margin:14px 0}.notice{background:#fff8e9;border:1px solid #f0dfbd;color:#725b31;padding:10px 12px;border-radius:9px;font-size:11px;margin-bottom:12px}.hidden{display:none!important}.pages{display:none}.pages.active{display:block}.footnav{display:flex;justify-content:space-between;margin:14px 0 28px}#filledFormPreviewWrap iframe{display:block}.report-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#f5f8f4;border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:12px}.preview{background:white;padding:24px;border:1px solid var(--line);border-radius:12px;max-width:900px;margin:auto}.preview h2{text-align:center;font:500 24px Georgia;margin:7px}.preview .center{text-align:center;color:#718078;font-size:10px}.preview h4{font-size:11px;letter-spacing:.1em;color:#997644;border-bottom:1px solid #e1e7e1;padding-bottom:5px;margin:20px 0 8px}.preview table{width:100%;border-collapse:collapse;font-size:11px}.preview td,.preview th{padding:6px;border-bottom:1px solid #e8ede8;text-align:left;vertical-align:top}.preview td:first-child{color:#6b776f}.preview ul{margin:5px 0;padding-left:20px}.preview li{font-size:11px;margin:3px 0}.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#17271f;color:white;padding:10px 15px;border-radius:9px;display:none;z-index:50;font-size:12px}.smallbtn{padding:6px 8px;font-size:10px}.footnote{font-size:9px;color:#7b867f;margin-top:12px}@media(max-width:850px){.wrap{grid-template-columns:1fr;padding:10px}.side{position:static;display:flex;overflow:auto;gap:3px;padding:7px}.side .label,.side .hint{display:none}.nav{white-space:nowrap;padding:8px}.top{padding:10px}.grid.four{grid-template-columns:repeat(2,1fr)}}@media(max-width:560px){.grid,.grid.three,.grid.four{grid-template-columns:1fr}.stats{grid-template-columns:repeat(3,1fr)}.stat{padding:9px}.stat strong{font-size:19px}.heading h1{font-size:23px}.panel{padding:13px}.brand small{display:none}.actions .optional{display:none}.allocrow{grid-template-columns:minmax(0,1fr) 75px 24px}}@media print{body{background:white}.top,.side,.no-print,.heading,.footnav{display:none!important}.wrap{display:block;padding:0}.panel{box-shadow:none;border:0;padding:0}.preview{border:0;padding:0;max-width:none}.pages{display:none!important}.pages.active{display:block!important}#report{display:block!important}@page{size:A4;margin:14mm}}
 </style></head>
 <body>
 <header class="top">
@@ -97,12 +97,25 @@
    <div class="panel"><h2>Testator Declaration & REP Verification</h2><p class="sub">Signature and verification fields reproduced from the last page of the source form. Signature images are not captured in this version; enter names and dates for record preparation.</p><div class="grid"><div class="field"><label>Testator Full Name</label><input data-path="signoff.testatorName"></div><div class="field"><label>Testator NRIC / Passport No.</label><input data-path="signoff.testatorNric"></div><div class="field"><label>Testator Declaration Date</label><input type="date" data-path="signoff.testatorDate"></div><div class="field"><label>REP Name</label><input data-path="signoff.repName"></div><div class="field"><label>REP Verification Date</label><input type="date" data-path="signoff.repDate"></div><div class="field"><label>Original NRIC / Passport sighted?</label><select data-path="signoff.idSighted"><option value="">Select</option><option>Yes</option><option>No</option></select></div></div><p class="tiny">The source form includes the client's declaration that information is true, complete and correct, agreement to sign the Letter of Engagement separately, and REP confirmation of sighting original identification.</p></div>
   </section>
   <section id="report" class="pages">
-   <div class="panel no-print"><h2>PDF Exports</h2><p class="sub">The client summary includes all entered particulars, people, beneficiary splits, asset details, instructions and trust information. Internal report includes clause-by-clause calculation.</p><div class="row" style="flex-wrap:wrap"><button class="btn primary" id="clientPdf">Client Summary – Bilingual PDF</button><button class="btn" id="internalPdf">Internal Clause Report PDF</button><button class="btn" id="backupBtn">Export Current Client</button><button class="btn" id="backupAllReportBtn">Backup All Clients</button><button class="btn" id="restoreReportBtn">Restore Backup</button><input type="file" id="restoreFileReport" accept=".json,application/json" class="hidden"></div><p class="tiny">The report opens in this page first. Tap Print / Save PDF, then choose Save to Files in the iPad print sheet. Backup includes all saved client records and app version information.</p></div>
+   <div class="panel no-print"><h2>PDF Exports</h2><p class="sub">The client summary includes all entered particulars, people, beneficiary splits, asset details, instructions and trust information. Internal report includes clause-by-clause calculation.</p><div class="row" style="flex-wrap:wrap"><button class="btn primary" id="clientPdf">Client Summary – Bilingual PDF</button><button class="btn" id="internalPdf">Internal Clause Report PDF</button><button class="btn" id="backupBtn">Export Current Client</button><button class="btn" id="backupAllReportBtn">Backup All Clients</button><button class="btn" id="restoreReportBtn">Restore Backup</button><input type="file" id="restoreFileReport" accept=".json,application/json" class="hidden"></div><p class="tiny">Generate the original Rockwills form from the data entered above, preview all 8 pages, then download the completed PDF. Signature spaces are left blank for manual signing. Backup includes all saved client records and app version information.</p></div>
+   <div class="panel no-print" id="completedFormPanel">
+    <h2>Fill Original Rockwills Will Draft Form</h2>
+    <p class="sub">Automatically transfer the information already entered in this client plan into the original 8-page Rockwills Will Writing Information Form. Signature fields are intentionally left blank for manual signing.</p>
+    <div class="row" style="flex-wrap:wrap">
+      <button class="btn primary" id="generateFilledFormBtn">Generate & Preview Filled Form</button>
+      <a class="btn" id="downloadFilledFormBtn" href="#" download="Completed_Rockwills_Will_Form.pdf" style="pointer-events:none;opacity:.45">Download Completed Form PDF</a>
+    </div>
+    <p class="tiny" id="filledFormStatus">The original 8-page form layout and wording are preserved. Only information available in this App will be inserted; unavailable fields and all signature lines remain blank.</p>
+    <div id="filledFormPreviewWrap" class="hidden" style="margin-top:14px">
+      <iframe id="filledFormPreview" title="Completed Rockwills Will Draft Form Preview" style="width:100%;height:75vh;border:1px solid var(--line);border-radius:12px;background:#fff"></iframe>
+    </div>
+   </div>
    <div id="reportPreview" class="preview"></div>
   </section>
   <div class="footnav no-print"><button class="btn" id="prevBtn">← Previous</button><button class="btn primary" id="nextBtn">Continue →</button></div>
  </main>
 </div><div class="toast" id="toast"></div>
+<script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 <script>
 const blank=()=>({
  personal:{name:"",nric:"",dob:"",address:"",marital:"",signature:"",phone:"",email:"",readEnglish:"",translation:"",translator:"",translatorId:"",language:"",estimatedFee:"",custody:"",planDate:new Date().toISOString().slice(0,10)},
@@ -118,7 +131,7 @@ const blank=()=>({
  trusts:{movable:{enabled:false},immovable:{enabled:false}},protectors:[{},{}],
  signoff:{testatorName:"",testatorNric:"",testatorDate:"",repName:"",repDate:"",idSighted:""}
 });
-const APP_VERSION="2.5.0";
+const APP_VERSION="2.6.0";
 const DB_KEY="willStudioV2Records";
 const DB_META_KEY="willStudioV2Meta";
 let d=blank(),activeId=null,page="overview";
@@ -552,9 +565,301 @@ function bindRestoreInput(inputId){
  if(input)input.onchange=()=>{handleRestoreFile(input.files?.[0]);input.value="";}
 }
 function backup(){backupCurrent()}
+
+function formDate(v){
+ if(!v)return "";
+ const m=String(v).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+ return m?`${m[3]}/${m[2]}/${m[1]}`:String(v);
+}
+function allocationForForm(a){
+ const members=(a?.members||[]).filter(m=>m&&m.id);
+ if(!members.length)return "";
+ return members.map(m=>{
+  let label=m.id==="FUTURE"?"Future Child(ren) (if any)":String(m.id);
+  if(m.id!=="FUTURE"){
+   const match=String(m.id).match(/^B(\d+)$/);
+   if(match){
+    const b=d.beneficiaries[Number(match[1])-1];
+    if(b?.name)label+=` ${b.name}`;
+   }
+  }
+  const pct=a.mode==="equal"?100/members.length:Number(m.pct||0);
+  return `${label} (${pct.toFixed(2).replace(/\.00$/,"")}%)`;
+ }).join(", ");
+}
+function allocationCompact(a){
+ const members=(a?.members||[]).filter(m=>m&&m.id);
+ if(!members.length)return "";
+ return members.map(m=>{
+  let label=m.id==="FUTURE"?"Future Child(ren)":m.id;
+  const match=String(m.id).match(/^B(\d+)$/);
+  if(match&&d.beneficiaries[Number(match[1])-1]?.name)label+=` ${d.beneficiaries[Number(match[1])-1].name}`;
+  const pct=a.mode==="equal"?100/members.length:Number(m.pct||0);
+  return `${label} (${pct.toFixed(1).replace(/\.0$/,"")}%)`;
+ }).join("\n");
+}
+let completedFormObjectUrl=null;
+function createFormCanvases(){
+ const canvases=Array.from({length:8},()=>{
+  const c=document.createElement("canvas");c.width=1224;c.height=1584;
+  const ctx=c.getContext("2d");ctx.scale(2,2);ctx.fillStyle="#111";ctx.textBaseline="top";
+  return {canvas:c,ctx};
+ });
+ const add=(pg,x,y,w,h,value,opt={})=>{
+  if(value===undefined||value===null||String(value).trim()==="")return;
+  const ctx=canvases[pg-1].ctx;
+  let text=String(value),size=opt.size||7.2,min=opt.min||5.2;
+  ctx.save();ctx.fillStyle=opt.color||"#111";
+  const lines=[];
+  const wrap=(txt,maxWidth,fontSize)=>{
+   ctx.font=`${opt.bold?"bold ":""}${fontSize}px Arial, "Helvetica Neue", sans-serif`;
+   const words=String(txt).split(/\s+/);let line="";
+   for(const word of words){
+    const test=line?line+" "+word:word;
+    if(ctx.measureText(test).width<=maxWidth||!line){line=test;continue;}
+    lines.push(line);line=word;
+   }
+   if(line)lines.push(line);
+  };
+  if(opt.single){
+   while(size>min){ctx.font=`${opt.bold?"bold ":""}${size}px Arial, "Helvetica Neue", sans-serif`;if(ctx.measureText(text).width<=w)break;size-=.25;}
+   ctx.font=`${opt.bold?"bold ":""}${size}px Arial, "Helvetica Neue", sans-serif`;
+   ctx.fillText(text,x,y,w);
+  }else{
+   wrap(text,w,size);
+   const lineHeight=opt.lineHeight||size*1.22;
+   const maxLines=Math.max(1,Math.floor(h/lineHeight));
+   if(lines.length>maxLines){
+    // Reduce the font slightly and reflow before clipping to the form cell.
+    size=Math.max(min,size-.8);lines.length=0;wrap(text,w,size);
+   }
+   ctx.font=`${opt.bold?"bold ":""}${size}px Arial, "Helvetica Neue", sans-serif`;
+   lines.slice(0,maxLines).forEach((line,i)=>ctx.fillText(line,x,y+i*lineHeight,w));
+  }
+  ctx.restore();
+ };
+ const mark=(pg,x,y)=>add(pg,x,y,12,12,"X",{size:9,bold:true,single:true});
+ const person=(pg,x,y,p,opts={})=>{
+  if(!p)return;
+  add(pg,x,y,opts.nameW||200,11,p.name,{single:true});
+  add(pg,x,y+(opts.idDy||18),opts.idW||205,11,p.id,{single:true});
+  add(pg,(opts.relX||x+240),y+(opts.idDy||18),opts.relW||100,11,p.relationship,{single:true});
+  if(p.email)add(pg,x,y+(opts.emailDy||34),opts.emailW||205,10,p.email,{single:true});
+  if(p.phone)add(pg,(opts.phoneX||x+240),y+(opts.emailDy||34),opts.phoneW||100,10,p.phone,{single:true});
+  if(p.address)add(pg,x,y+(opts.addressDy||48),opts.addressW||430,opts.addressH||18,p.address,{size:6.5});
+  if(p.arrangement==="Substitute")mark(pg,opts.subX||455,y+(opts.arrDy||0));
+  if(p.arrangement==="Joint")mark(pg,opts.jointX||505,y+(opts.arrDy||0));
+ };
+ // PAGE 1 – Franchisee and testator particulars.
+ add(1,185,70,175,10,d.franchisee.name,{single:true});
+ add(1,365,70,160,10,d.franchisee.code,{single:true});
+ add(1,185,84,175,10,d.franchisee.phone,{single:true});
+ add(1,365,84,160,10,d.franchisee.email,{single:true});
+ const p=d.personal||{};
+ add(1,185,159,365,12,p.name,{single:true});
+ add(1,185,174,220,11,p.nric,{single:true});
+ add(1,425,174,115,11,formDate(p.dob),{single:true});
+ add(1,185,195,365,27,p.address,{size:7});
+ const maritalX={Single:190,Married:238,Divorced:292,Widowed:360};
+ if(maritalX[p.marital])mark(1,maritalX[p.marital],219);
+ const sigX={"Normal Signature":190,"Thumbprint":275};
+ if(sigX[p.signature])mark(1,sigX[p.signature],235);
+ add(1,190,252,140,10,p.phone,{single:true});
+ add(1,340,252,205,10,p.email,{single:true});
+ if(p.readEnglish) add(1,440,272,90,10,p.readEnglish.toUpperCase(),{single:true,bold:true});
+ if(p.translation) add(1,70,272,140,10,"Oral translation: "+p.translation,{single:true});
+ add(1,285,286,145,10,p.translator,{single:true});
+ add(1,445,286,105,10,p.translatorId,{single:true});
+ add(1,300,299,180,10,p.language,{single:true});
+ const estimated=totalEstimatedFee();
+ const estimatedText=(typeof estimated==="number")
+  ? `RM ${estimated.toLocaleString("en-MY")}${rwtSubstituteFee()?" incl. RM120 RWT Substitute":""}`
+  : (p.estimatedFee||estimated);
+ add(1,185,313,145,10,estimatedText,{single:true,size:6.2,min:5.2});
+ if(p.custody){
+  const cx={Annual:445,Lifetime:490,"Lifetime Plus":535};
+  mark(1,cx[p.custody]||445,313);
+ }
+ const ex=d.appointments.executors||[];
+ const exY=[361,445,523,609];
+ ex.forEach((v,i)=>person(1,168,exY[i],v,{nameW:285,idW:270,relX:335,relW:180,idDy:20,addressDy:48,addressW:400,addressH:15,subX:420,jointX:500,arrDy:0}));
+ if(d.appointments.rwt==="Sole Executor")mark(1,270,718);
+ if(d.appointments.rwt==="Substitute to the above")mark(1,400,718);
+
+ // PAGE 2 – Guardians, digital facilitators and B1–B10.
+ const gs=d.appointments.guardians||[];
+ gs.forEach((v,i)=>person(2,170,i===0?51:145,v,{nameW:300,idW:260,relX:335,relW:170,idDy:19,addressDy:47,addressW:420,addressH:18,subX:420,jointX:500}));
+ if(d.guardianPayment?.enabled){
+  mark(2,56,229);
+  if(d.guardianPayment.yesNo) add(2,245,229,70,10,d.guardianPayment.yesNo,{single:true});
+  if(d.guardianPayment.frequency)add(2,190,246,330,10,d.guardianPayment.frequency,{single:true});
+  add(2,145,260,350,10,d.guardianPayment.details,{single:true});
+ }
+ const dfs=d.appointments.facilitators||[];
+ dfs.forEach((v,i)=>person(2,170,i===0?301:375,v,{nameW:285,idW:260,relX:335,relW:170,idDy:19,emailDy:35,emailW:260,phoneX:335,phoneW:170,addressDy:52,addressW:420,addressH:16,subX:420,jointX:500}));
+ (d.beneficiaries||[]).slice(0,10).forEach((b,i)=>{
+  const y=500+i*22.1;
+  add(2,80,y,175,13,b.name,{single:true});
+  add(2,238,y,125,13,b.id,{single:true});
+  add(2,369,y,88,13,b.relationship,{single:true});
+  add(2,460,y,75,13,b.nationality,{single:true});
+ });
+
+ // PAGE 3 – Common gifts and Section F beneficiary columns.
+ if(d.gifts.common.jointBank)mark(3,505,81);
+ if(d.gifts.common.jointUnitTrust)mark(3,505,114);
+ const giftRows=[
+  ["bank",228],["unitTrust",255],["epf",284],["insurance",330],["vehicles",360],
+  ["safe",400],["jewellery",442],["club",461],["futureProperty",483],
+  ["bursa",516],["sgx",550],["digital",590],["custom15",628],["custom16",654],
+  ["custom17",680],["custom18",706],["custom19",732]
+ ];
+ const giftRowMeta=new Map(giftDefs.map((x,i)=>[x[0],{label:x[1],q:x[2]}]));
+ giftRows.forEach(([id,y])=>{
+  const g=d.gifts.specific?.[id];if(!g?.enabled)return;
+  const meta=giftRowMeta.get(id);
+  if(id.startsWith("custom")&&g.details)add(3,78,y-7,270,18,g.details,{size:6.6});
+  else if((id==="safe"||id==="digital")&&g.details)add(3,78,y+4,270,20,g.details,{size:6.3});
+  add(3,338,y,74,24,allocationCompact(g.alloc?.main),{size:6.2});
+  add(3,414,y,78,24,allocationCompact(g.alloc?.sub1),{size:6.2});
+  add(3,498,y,70,24,allocationCompact(g.alloc?.sub2),{size:6.2});
+ });
+
+ // PAGE 4 – Immovable property and business interests.
+ (d.properties||[]).forEach((v,i)=>{
+  if(!v||!(v.type||v.details||v.ownership||v.coOwner||v.alloc))return;
+  const top=[98,226,353][i]||98;
+  add(4,72,top,180,10,v.type,{single:true});
+  add(4,72,top+15,178,92,v.details,{size:6.6});
+  if(v.ownership==="Sole Name")mark(4,266,top+3);
+  if(v.ownership==="Joint Name")mark(4,300,top+3);
+  if(v.coOwner)add(4,72,top+105,175,12,"Co-owner: "+v.coOwner,{size:6.4});
+  add(4,338,top+6,74,90,allocationCompact(v.alloc?.main),{size:6.2});
+  add(4,414,top+6,78,90,allocationCompact(v.alloc?.sub1),{size:6.2});
+  add(4,498,top+6,72,90,allocationCompact(v.alloc?.sub2),{size:6.2});
+ });
+ (d.businesses||[]).forEach((v,i)=>{
+  if(!v||!(v.name||v.reg||v.type||v.remarks||v.alloc))return;
+  const y=551+i*25.8;
+  const label=[v.name,v.reg,v.type,v.remarks].filter(Boolean).join(" · ");
+  add(4,72,y,190,22,label,{size:6.5});
+  add(4,338,y,74,21,allocationCompact(v.alloc?.main),{size:6.1});
+  add(4,414,y,78,21,allocationCompact(v.alloc?.sub1),{size:6.1});
+  add(4,498,y,72,21,allocationCompact(v.alloc?.sub2),{size:6.1});
+ });
+
+ // PAGE 5 – Residuary estate and other matters.
+ const residRows=[["main",92],["sub1",126],["sub2",164],["sub3",205],["sub4",244]];
+ residRows.forEach(([key,y])=>add(5,230,y,225,30,allocationCompact(d.residuary?.[key]),{size:7}));
+ if(d.other.comm.enabled){mark(5,54,302);add(5,430,302,55,12,d.other.comm.days||"30",{single:true});}
+ if(d.other.futureChildren.enabled){
+  mark(5,54,378);
+  add(5,255,433,300,30,[d.other.futureChildren.spouseName,d.other.futureChildren.spouseNric].filter(Boolean).join(" / "),{size:7});
+  if(d.other.futureChildren.include)add(5,145,412,100,10,d.other.futureChildren.include,{single:true});
+  if(d.other.futureChildren.notes)add(5,70,458,480,24,d.other.futureChildren.notes,{size:6.5});
+ }
+ if(d.other.futureMarriage.enabled){
+  mark(5,54,490);
+  add(5,255,520,300,12,d.other.futureMarriage.name,{single:true});
+  add(5,255,545,300,12,d.other.futureMarriage.nric,{single:true});
+ }
+ if(d.other.exclusion.enabled){
+  mark(5,54,555);
+  add(5,75,670,290,12,d.other.exclusion.name,{single:true});
+  add(5,385,670,150,12,d.other.exclusion.relationship,{single:true});
+  add(5,75,704,460,25,d.other.exclusion.reason,{size:6.6});
+ }
+
+ // PAGE 6 – Optional clause ticks, wishes, declaration details (signature left blank).
+ const optionalRows=[
+  ["conscientious",47],["omission",86],["contest",115],["bankrupt",164],
+  ["coma",190],["insurancePower",216],["minor",244],["comaTrust",277]
+ ];
+ optionalRows.forEach(([id,y])=>{if(d.optional?.[id]?.enabled)mark(6,53,y);});
+ const wishRows=[["funeral",326],["endearment",391],["instruction",450]];
+ wishRows.forEach(([id,y])=>{
+  const w=d.wishes?.[id];if(w?.enabled&&w.text)add(6,55,y,490,id==="funeral"?48:48,w.text,{size:7});
+ });
+ const signName=d.signoff.testatorName||p.name;
+ const signId=d.signoff.testatorNric||p.nric;
+ add(6,72,682,250,11,signName,{single:true});
+ add(6,72,704,250,11,signId,{single:true});
+ add(6,72,726,250,11,formDate(d.signoff.testatorDate),{single:true});
+ add(6,345,725,205,11,d.signoff.repName||d.franchisee.repName,{single:true});
+ add(6,345,746,205,11,formDate(d.signoff.repDate),{single:true});
+
+ // PAGE 7 – Movable assets testamentary trust.
+ if(d.trusts.movable.enabled){
+  const t=d.trusts.movable;
+  [["beneficiaries",194,26],["purposes",228,65],["assets",302,35],["duration",347,82],["payment",435,64],["balance",503,48]]
+   .forEach(([k,y,h])=>add(7,425,y,125,h,t[k],{size:6.7}));
+ }
+
+ // PAGE 8 – Immovable trust, Protector and second declaration block.
+ if(d.trusts.immovable.enabled){
+  const t=d.trusts.immovable;
+  [["occupation",115,35],["rental",158,35],["assets",202,38],["duration",246,78],["powers",333,38],["balance",376,42]]
+   .forEach(([k,y,h])=>add(8,425,y,125,h,t[k],{size:6.7}));
+ }
+ (d.protectors||[]).forEach((v,i)=>{
+  const y=i===0?454:529;
+  person(8,72,y,v,{nameW:300,idW:280,relX:335,relW:180,idDy:17,addressDy:43,addressW:430,addressH:15,subX:420,jointX:500});
+ });
+ // Duplicate declaration names/IDs on page 8; signature strokes remain blank.
+ add(8,72,674,250,11,signName,{single:true});
+ add(8,72,697,250,11,signId,{single:true});
+ add(8,72,719,250,11,formDate(d.signoff.testatorDate),{single:true});
+ add(8,345,697,205,11,d.signoff.repName||d.franchisee.repName,{single:true});
+ add(8,345,728,205,11,formDate(d.signoff.repDate),{single:true});
+ return canvases;
+}
+async function generateCompletedWillForm(){
+ const status=document.getElementById("filledFormStatus");
+ const btn=document.getElementById("generateFilledFormBtn");
+ try{
+  syncAllocationControls();
+  // Keep the local client record current before producing the submission form.
+  if(typeof save==="function")save();
+  btn.disabled=true;btn.textContent="Generating…";
+  status.textContent="Preparing the original 8-page form and inserting the available client information…";
+  if(!window.PDFLib)throw new Error("The PDF form engine did not load. Check your internet connection and reload the App.");
+  const response=await fetch("./rockwills_will_draft_form_source.pdf",{cache:"no-store"});
+  if(!response.ok)throw new Error("The original Rockwills form PDF could not be loaded from the App deployment.");
+  const original=await response.arrayBuffer();
+  const pdfDoc=await PDFLib.PDFDocument.load(original);
+  const pages=pdfDoc.getPages();
+  const canvases=createFormCanvases();
+  for(let i=0;i<pages.length;i++){
+   const png=await pdfDoc.embedPng(canvases[i].canvas.toDataURL("image/png"));
+   pages[i].drawImage(png,{x:0,y:0,width:pages[i].getWidth(),height:pages[i].getHeight()});
+  }
+  const bytes=await pdfDoc.save();
+  const blob=new Blob([bytes],{type:"application/pdf"});
+  if(completedFormObjectUrl)URL.revokeObjectURL(completedFormObjectUrl);
+  completedFormObjectUrl=URL.createObjectURL(blob);
+  const preview=document.getElementById("filledFormPreview");
+  preview.src=completedFormObjectUrl+"#view=FitH";
+  document.getElementById("filledFormPreviewWrap").classList.remove("hidden");
+  const link=document.getElementById("downloadFilledFormBtn");
+  const safeName=(d.personal.name||"Client").replace(/[^a-z0-9-_]/gi,"_");
+  link.href=completedFormObjectUrl;link.download=`${safeName}_Completed_Rockwills_Will_Form.pdf`;
+  link.style.pointerEvents="auto";link.style.opacity="1";
+  status.textContent="Completed form generated. Review every page before downloading. Signature areas are intentionally left blank for you and the client to sign.";
+  btn.textContent="Regenerate Filled Form";
+  toast("Completed Will Draft Form is ready");
+ }catch(err){
+  console.error("Completed form generation error:",err);
+  status.textContent="Could not generate the completed form: "+(err?.message||String(err));
+  alert("Could not generate the completed Will Draft Form.\n\n"+(err?.message||String(err)));
+ }finally{
+  btn.disabled=false;if(btn.textContent==="Generating…")btn.textContent="Generate & Preview Filled Form";
+ }
+}
+
 document.querySelectorAll(".nav").forEach(x=>x.onclick=()=>go(x.dataset.page));document.querySelectorAll("[data-go]").forEach(x=>x.onclick=()=>go(x.dataset.go));
 document.getElementById("prevBtn").onclick=()=>go(pageNames[Math.max(0,pageNames.indexOf(page)-1)]);document.getElementById("nextBtn").onclick=()=>go(pageNames[Math.min(pageNames.length-1,pageNames.indexOf(page)+1)]);
-document.getElementById("saveBtn").onclick=save;document.getElementById("pdfBtn").onclick=()=>{save();go("report");printPdf(false)};document.getElementById("clientPdf").onclick=()=>printPdf(false);document.getElementById("internalPdf").onclick=()=>printPdf(true);document.getElementById("backupBtn").onclick=backupCurrent;
+document.getElementById("saveBtn").onclick=save;document.getElementById("pdfBtn").onclick=()=>{save();go("report");printPdf(false)};document.getElementById("clientPdf").onclick=()=>printPdf(false);document.getElementById("internalPdf").onclick=()=>printPdf(true);
+document.getElementById("generateFilledFormBtn").onclick=generateCompletedWillForm;document.getElementById("backupBtn").onclick=backupCurrent;
 document.getElementById("backupAllBtn").onclick=backupAll;
 document.getElementById("backupAllReportBtn").onclick=backupAll;
 document.getElementById("restoreBtn").onclick=()=>document.getElementById("restoreFile").click();
