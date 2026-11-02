@@ -131,7 +131,7 @@ const blank=()=>({
  trusts:{movable:{enabled:false},immovable:{enabled:false}},protectors:[{},{}],
  signoff:{testatorName:"",testatorNric:"",testatorDate:"",repName:"",repDate:"",idSighted:""}
 });
-const APP_VERSION="2.7.0";
+const APP_VERSION="2.8.0";
 const DB_KEY="willStudioV2Records";
 const DB_META_KEY="willStudioV2Meta";
 let d=blank(),activeId=null,page="overview";
@@ -588,15 +588,35 @@ function allocationForForm(a){
  }).join(", ");
 }
 function allocationCompact(a){
- const members=(a?.members||[]).filter(m=>m&&m.id);
+ // Accept current and legacy saved-client allocation shapes.
+ if(a==null)return "";
+ const mode=a.mode||a.splitMode||a.distributionMode||"";
+ let raw=Array.isArray(a)?a:(a.members||a.beneficiaries||a.selectedBeneficiaries||a.selectedBeneficiaryIds||a.beneficiaryList||a.selected||a.items||a.people||a.allocations||[]);
+ if(!Array.isArray(raw)&&raw&&typeof raw==="object")raw=Object.values(raw);
+ if(typeof raw==="string")raw=raw.split(/[,;|]/).map(x=>x.trim()).filter(Boolean);
+ const members=(raw||[]).map(m=>{
+  if(typeof m==="string")return {id:m};
+  if(!m||typeof m!=="object")return null;
+  return {...m,id:m.id??m.beneficiaryId??m.beneficiaryCode??m.beneficiary??m.code??m.value??m.key??m.name??""};
+ }).filter(m=>m&&String(m.id||"").trim());
+ if(!members.length){
+  const ids=a.beneficiaryIds||a.selectedBeneficiaryIds||a.selectedIds||a.ids;
+  if(Array.isArray(ids))members.push(...ids.map(id=>({id})));
+ }
  if(!members.length)return "";
+ const equal=mode==="equal"||mode==="split-equally"||mode==="Split Equally"||mode==="equally"||a.equal===true||a.splitEqually===true;
  return members.map(m=>{
-  let label=m.id==="FUTURE"?"Future Child(ren)":m.id;
-  const match=String(m.id).match(/^B(\d+)$/);
-  if(match&&d.beneficiaries[Number(match[1])-1]?.name)label+=` ${d.beneficiaries[Number(match[1])-1].name}`;
-  const pct=a.mode==="equal"?100/members.length:Number(m.pct||0);
-  return `${label} (${pct.toFixed(1).replace(/\.0$/,"")}%)`;
- }).join("\n");
+  const id=String(m.id).trim();
+  let label=id==="FUTURE"||id==="FUTURE_CHILDREN"?"Future Child(ren)":id;
+  const match=id.match(/^B(\d+)$/i);
+  if(match){
+   const b=d.beneficiaries?.[Number(match[1])-1];
+   if(b?.name)label=`${id.toUpperCase()} – ${b.name}`;
+  }
+  const rawPct=m.pct??m.percentage??m.sharePct??m.share??m.percent??m.allocation;
+  const pct=equal?100/members.length:(rawPct!==undefined&&rawPct!==""?Number(rawPct):null);
+  return pct===null?label:`${label} (${pct.toFixed(1).replace(/\\.0$/,"")}%)`;
+ }).join("\\n");
 }
 let completedFormObjectUrl=null;
 function createFormCanvases(){
@@ -647,6 +667,10 @@ function createFormCanvases(){
   ctx.restore();
  };
  const mark=(pg,x,y)=>add(pg,x,y,12,12,"X",{size:9,bold:true,single:true});
+ const circle=(pg,cx,cy,rx,ry)=>{
+  const ctx=canvases[pg-1].ctx;ctx.save();ctx.strokeStyle="#111";ctx.lineWidth=1.05;
+  ctx.beginPath();ctx.ellipse(cx,cy,rx,ry,0,0,Math.PI*2);ctx.stroke();ctx.restore();
+ };
  const whiteout=(pg,x,y,w,h)=>{const ctx=canvases[pg-1].ctx;ctx.save();ctx.fillStyle="#fff";ctx.fillRect(x,y,w,h);ctx.restore();};
  const person=(pg,x,y,p,opts={})=>{
   if(!p)return;
@@ -669,10 +693,10 @@ function createFormCanvases(){
  add(1,185,174,220,11,p.nric,{single:true});
  add(1,425,174,115,11,formDate(p.dob),{single:true});
  add(1,185,195,365,27,p.address,{size:7});
- const maritalX={Single:190,Married:238,Divorced:292,Widowed:360};
- if(maritalX[p.marital])mark(1,maritalX[p.marital],219);
- const sigX={"Normal Signature":190,"Thumbprint":275};
- if(sigX[p.signature])mark(1,sigX[p.signature],235);
+ const maritalCircle={Single:[205,226],Married:[255,226],Divorced:[313,226],Widowed:[374,226]};
+ if(maritalCircle[p.marital])circle(1,maritalCircle[p.marital][0],221,23,8);
+ const sigCircle={"Normal Signature":[225,236],"Thumbprint":[305,236]};
+ if(sigCircle[p.signature])circle(1,sigCircle[p.signature][0],sigCircle[p.signature][1],39,8);
  add(1,220,252,125,10,p.phone,{single:true});
  add(1,445,252,115,10,p.email,{single:true});
  if(p.readEnglish==="Yes")mark(1,455,272);
@@ -691,7 +715,7 @@ function createFormCanvases(){
  }
  const ex=d.appointments.executors||[];
  const exY=[361,445,523,609];
- ex.forEach((v,i)=>person(1,168,exY[i],v,{nameW:350,idW:245,relX:432,relW:125,idDy:20,addressDy:50,addressW:390,addressH:15,subX:420,jointX:500,arrDy:0}));
+ ex.forEach((v,i)=>person(1,168,exY[i],v,{nameW:350,idW:245,relX:432,relW:125,idDy:20,addressDy:50,addressW:390,addressH:15,subX:413,jointX:500,arrDy:0}));
  if(d.appointments.rwt==="Sole Executor")mark(1,270,718);
  if(d.appointments.rwt==="Substitute to the above")mark(1,400,718);
 
@@ -730,9 +754,9 @@ function createFormCanvases(){
   if(id==="safe"&&g.details)add(3,128,394,165,32,g.details,{size:6.0});
   else if(id==="digital"&&g.details)add(3,128,597,165,17,g.details,{size:6.0});
   else if(id.startsWith("custom")&&g.details)add(3,128,y,165,18,g.details,{size:6.0});
-  add(3,345,y-5,65,26,allocationCompact(g.alloc?.main),{size:5.8});
-  add(3,422,y-5,65,26,allocationCompact(g.alloc?.sub1),{size:5.8});
-  add(3,505,y-5,65,26,allocationCompact(g.alloc?.sub2),{size:5.8});
+  add(3,345,y-5,65,26,allocationCompact(d.gifts.specific?.[id]?.alloc?.main||g.alloc?.main),{size:5.8});
+  add(3,422,y-5,65,26,allocationCompact(d.gifts.specific?.[id]?.alloc?.sub1||g.alloc?.sub1),{size:5.8});
+  add(3,505,y-5,65,26,allocationCompact(d.gifts.specific?.[id]?.alloc?.sub2||g.alloc?.sub2),{size:5.8});
  });
 
  // PAGE 4 – Immovable property and business interests.
@@ -740,16 +764,16 @@ function createFormCanvases(){
   if(!v||!(v.type||v.details||v.ownership||v.coOwner||v.alloc))return;
   const top=[95,222,349][i]||95;
   const rowH=126;
-  whiteout(4,64,top+2,187,rowH-4);
-  add(4,68,top+5,178,10,`${i+1}  1@ Property Details`,{size:6.8,bold:true});
-  if(v.type)add(4,68,top+20,178,12,`Type: ${v.type}`,{size:6.4});
-  if(v.details)add(4,68,top+35,178,65,v.details,{size:6.2,lineHeight:8});
-  if(v.coOwner)add(4,68,top+104,178,12,`Co-owner: ${v.coOwner}`,{size:5.8});
+  whiteout(4,63,top,190,rowH);
+  add(4,68,top+7,178,11,`${i+1}  1@ Property Details`,{size:6.7,bold:true});
+  if(v.type)add(4,68,top+23,178,12,`Type: ${v.type}`,{size:6.3});
+  if(v.details)add(4,68,top+40,178,57,v.details,{size:6.1,min:5.4,lineHeight:7.6});
+  if(v.coOwner)add(4,68,top+105,178,12,`Co-owner: ${v.coOwner}`,{size:5.7});
   if(v.ownership==="Sole Name")mark(4,274,top+5);
   if(v.ownership==="Joint Name")mark(4,314,top+5);
-  add(4,346,top+12,64,100,allocationCompact(v.alloc?.main),{size:5.8});
-  add(4,423,top+12,64,100,allocationCompact(v.alloc?.sub1),{size:5.8});
-  add(4,506,top+12,64,100,allocationCompact(v.alloc?.sub2),{size:5.8});
+  add(4,346,top+12,64,100,allocationCompact(d.properties?.[i]?.alloc?.main||v.alloc?.main),{size:5.8});
+  add(4,423,top+12,64,100,allocationCompact(d.properties?.[i]?.alloc?.sub1||v.alloc?.sub1),{size:5.8});
+  add(4,506,top+12,64,100,allocationCompact(d.properties?.[i]?.alloc?.sub2||v.alloc?.sub2),{size:5.8});
  });
  (d.businesses||[]).forEach((v,i)=>{
   if(!v||!(v.name||v.reg||v.type||v.remarks||v.alloc))return;
@@ -764,7 +788,7 @@ function createFormCanvases(){
  // PAGE 5 – Residuary estate and other matters.
  const residRows=[["main",92],["sub1",126],["sub2",164],["sub3",205],["sub4",244]];
  residRows.forEach(([key,y])=>add(5,258,y,195,30,allocationCompact(d.residuary?.[key]),{size:6.6}));
- if(d.other.comm.enabled){mark(5,54,302);add(5,430,302,55,12,d.other.comm.days||"30",{single:true});}
+ if(d.other.comm.enabled){add(5,430,302,55,12,d.other.comm.days||"30",{single:true});}
  if(d.other.futureChildren.enabled){
   mark(5,54,378);
   add(5,255,433,285,11,d.other.futureChildren.spouseName,{single:true});
